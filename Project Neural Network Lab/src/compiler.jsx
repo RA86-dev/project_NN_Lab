@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { getCurrentCode } from "./HelpDesk";
+import { prepareUploadedDataset } from "./blocks/dataset/upload_dataset";
 
 function fail(message, block) {
   const suffix = block?.type ? ` (block: ${block.type})` : "";
@@ -137,6 +138,20 @@ export function compileBlock(block) {
         outputDim: numberField(block, "Output_Dim"),
         inputLength: numberField(block, "Input Length")
       };
+    case "upload_dataset":
+      return {
+        type: "dataset",
+        name: "upload",
+        task: textField(block, "TASK"),
+        inputKey: textField(block, "INPUT_KEY"),
+        labelKey: textField(block, "LABEL_KEY"),
+        ...prepareUploadedDataset(
+          block.id,
+          textField(block, "INPUT_KEY"),
+          textField(block, "LABEL_KEY"),
+          textField(block, "TASK"),
+        ),
+      };
     default:
       fail("Unknown block " + block.type);
   }
@@ -208,6 +223,20 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
     xs: ${context.sequenceInput ? "tf.tensor3d(xs, [xs.length, 1, 1])" : "tf.tensor2d(xs, [xs.length, 1])"},
     ys: tf.tensor2d(ys, [ys.length, 1])
   };
+}`;
+      }
+
+      if (node.name === "upload") {
+        const reshapeSequence = context.sequenceInput && node.inputShape.length === 1
+          ? "xs = xs.reshape([xs.shape[0], 1, xs.shape[1]]);"
+          : "";
+        return `function generateData() {
+  console.log("Loading uploaded dataset ${node.fileName.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}...");
+  let xs = tf.tensor(${JSON.stringify(node.xs)});
+  const ys = tf.tensor(${JSON.stringify(node.ys)});
+  ${reshapeSequence}
+  console.log("Uploaded dataset loaded", xs.shape, ys.shape);
+  return { xs, ys };
 }`;
       }
       break;

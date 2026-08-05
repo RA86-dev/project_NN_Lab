@@ -46,6 +46,14 @@ export const definitions = {
     MNIST is a online, public dataset for handwriting recognition. It is used for benchmarking models, since most models can complete the MNIST test easily.
     **NOTE:** Mnist is quite laggy. Do not expect great performance.
     `,
+    upload_dataset: `
+    #### Upload Dataset
+    Uploads a local JSON or JSONL file for model training or validation.
+
+    JSON may be an array of records, or an object containing a \`data\` or \`records\` array. JSONL must contain one JSON object per line.
+
+    Use **Input key(s)** and **Label key** to select fields from each record. Separate multiple input columns with commas; dot-separated nested keys are also supported. Classification converts scalar labels to one-hot vectors; regression accepts numeric scalar or array labels.
+    `,
     gru_layer: `
     #### GRU Layer
     A specialized type of Recurrent neural network (RNN) used for processing sequential and time series data. It uses two gates.

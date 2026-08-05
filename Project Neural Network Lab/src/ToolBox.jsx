@@ -3,6 +3,7 @@ import "./blocks/neural_networks/sequential"
 import "./blocks/main_program"
 import "./blocks/dataset/math_dataset"
 import "./blocks/dataset/mnist_dataset"
+import "./blocks/dataset/upload_dataset"
 import "./blocks/layers/GRUModel"
 import "./blocks/training/train"
 import "./blocks/inference/run_inference_model"
@@ -15,8 +16,6 @@ import "./blocks/layers/MaxPooling2D"
 import "./blocks/layers/LSTM"
 import "./blocks/layers/embedding"
 import "./blocks/layers/multihead_attention"
-var hours_spent_on_block_imports = 2; // AAAAAAA
-
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -132,6 +131,10 @@ contents: [
         {
             kind: "block",
             type: "mnist_dataset"
+        },
+        {
+            kind: "block",
+            type: "upload_dataset"
         }
     ]
 },
