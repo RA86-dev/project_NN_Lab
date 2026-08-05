@@ -68,6 +68,61 @@ export const definitions = {
     validate_model: `
     #### Validate Model
     Evaluates an already-trained model against the connected dataset. The Model ID must match the name used by an earlier Train block.
+    `,
+    multihead_attention: `
+    #### Multi-Head Attention Layer
+    A MHA (Multi-Head Attention) layer is a component used in transformer models to allow the model to focus on different parts of the input sequence simultaneously.
+    ### Arguments
+    Heads - the number of attention heads.
+    Key Dimensions - the dimensionality of the key vectors.
+    `,
+    lstm_layer: `
+    #### LSTM Layer
+    A type of recurrent neural network (RNN) layer that is designed to avoid the vanishing gradient problem.
+    ### Arguments
+    Units - the number of units in the LSTM layer.
+    Return Sequences - Controls whether an LSTM outputs every timestep or just the final result.
+    `,
+    dropout_layer: `
+    #### Dropout Layer
+    A regularization layer that randomly sets a fraction of input units to 0 at each update during training time, which helps prevent overfitting.
+    ### Arguments
+    Rate - the fraction of the input units to drop.`,
+    conv2d_layer: `
+    #### Conv2D Layer
+    A 2D convolutional layer that applies a convolution operation to the input. This helps identify different features in the input.
+    ### Arguments
+    Filters - the number of filters to apply.
+    Kernel Size - the size of the kernel.
+    Strides - the stride of the convolution.
+    Padding - the padding to apply.
+    `,
+    embedding_layer: `
+    #### Embedding Layer
+    A layer that maps integers to dense vectors of fixed size.
+    ### Arguments
+    Input Dim - the size of the vocabulary.
+    Output Dim - the dimension of the dense embedding.
+    `,
+    activation_layer: `
+    #### Activation Layer
+    A layer that applies an activation function to the input.
+    ### Arguments
+    Activation - the activation function to apply.
+    `,
+    batch_normalization: `
+    #### Batch Normalization Layer
+    A layer that normalizes the input across the batch dimension.
+    ### Arguments
+    Axis - the axis along which to normalize.
+    Momentum - the momentum for the moving average.
+    Epsilon - a small constant for numerical stability.
+    `,
+    layer_normalization: `
+    #### Layer Normalization Layer
+    A layer that normalizes the input across the feature dimension.
+    ### Arguments
+    Axis - the axis along which to normalize.
+    Epsilon - a small constant for numerical stability.
     `
-
 }

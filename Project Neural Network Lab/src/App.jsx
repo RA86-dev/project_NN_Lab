@@ -672,8 +672,6 @@ function App() {
           <LowerElements workspace={workspace} />
         </section>
       </main>
-
-      <footer>Neural Network Lab <span>·</span> TensorFlow.js <span>·</span> Your data stays in this browser</footer>
     </div>
   );
 }
