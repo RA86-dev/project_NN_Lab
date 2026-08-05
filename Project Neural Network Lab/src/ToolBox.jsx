@@ -15,6 +15,8 @@ import "./blocks/layers/MaxPooling2D"
 import "./blocks/layers/LSTM"
 import "./blocks/layers/embedding"
 import "./blocks/layers/multihead_attention"
+var hours_spent_on_block_imports = 2; // AAAAAAA
+
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [

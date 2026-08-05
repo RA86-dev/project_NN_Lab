@@ -16,7 +16,7 @@ Currently, the following has been added:
     - Dropout Layer
     - Embedding Layer
     - LSTM Layer
-    - **Beta**: *Multi-head Attention* (Will be finished by EOD)
+    - Multi-Head attention
 - Normalization Layers
     - BatchNormalization
     - LayerNormalization
@@ -41,10 +41,45 @@ npm run dev
 </details>
 
 ## Demo
-See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages.
+See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages. 
 ## License
 Licensed under MIT [here](LICENSE)
+## AI Use Declaration
+In this project, AI was used for the user interface and debugging issues.
 ## Example Image
 <p align="center">
   <img src="README_assets/screenshot.png" alt="Screenshot" width="600"/>
 </p>
+
+## Getting Started Guide (How to Use)
+Hello! This is a guide on how to use my project. All you really need to know is:
+- What is a neural network?
+and a little bit of concepts. The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system.
+### Vocabulary
+Every "fancy" word is listed here, along with a simplified definition.
+- Model - the neural network.
+- Activation Layer - A mathematical formula inside of a neural network. It decides whether the node should fire, or to pass the signal. It basically just adds nonlinearity.
+- Conv2d - Conv2d is a neural network architecture style, that basically identifies patterns in a 2d shape (thats where the "2d" in the name comes from). Its goal is to basically spot potential patterns, so its used for neural networks to be able to identify patterns.
+- Dense Layer - A dense layer is basically a layer where everything is connected. In some other architectures, such as MoE (Mixture of Experts), not all parameters are connected to make it more efficient. This is the most common block used in AI and Machine Learning.
+- Dropout Layer - This layer effectively turns off a certain percentage of connections. This is used for testing models or to train models to be more compressed.
+- GRU - GRU means Gated Recurrent Unit. It is a simpler version of a LSTM, and has "gates" to control things like how much past information to keep for the future, how much to forget, and a hidden state to merge the short term and long term memory into one. For LSTM and GRUs, you need to turn on return sequences for if there are more layers underneath it.
+- Recurrent Neural Network (RNN) - A recursive model. It repeats over and over its data to identify every single aspect. This makes it better for data analysis, however suffers from short term memory issues.
+- LSTM - A special form of a Recurrent Neural Network designed to remember information over long sequences. Traditional RNNs suffer from the vanishing gradient problem, which basically means that it forgets short term data, however, this one does not. However, these are slower than Traditional RNNs.
+- Embedding Layer - A layer which basically converts each word into a token for the AI model. This is useful for Transformers, which is used in large LLMs (Generative* AI models).
+- MaxPooling2D - Downsamples the input using the maximum value. Its used to shrink spacial dimensions while keeping the most "dominant" features and decrease computation times.
+- Sequential Neural Network - A model that goes in order of each layer.
+- Normalization - This basically shrinks all of the data to a common range, to prevent large features from overpowering smaller features.
+- Batch Normalization - Standardizes the inputs to each layer of a neural network.
+- Layer Normalization - Instead of normalizing across a batch of data (Batch Normalization), it calculates the mean and variability across the features of a training example.
+- MNIST dataset - The MNIST dataset is a 74,000 digit dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
+
+Here's a example model:
+
+![Alt-Text](README_assets/SNN-default-model.png)
+This is how you configure a normal neural network model. In this case, we are using MNIST, not the math dataset (which can literally just use one neuron but thats for fast testing). In the SNN model, we define the name (which is used for inference as shown by the MNIST brick) and 3 dense layers after that. 
+#### Activation Definitions
+- Activation - An activation function is a mathematical rule used in ANNs to decide if a neuron should fire or pass information.
+    - ReLU - A commonly used function for activations. Its easy and quick. 
+    - Sigmoid - A mathematical formula that converts a number between 0 and 1, where 0 is equal to negative infinity and 1 is equal to infinity. Good for probabilities and predictions.
+    - Softmax - A function that turns a list of unconstrained numbers into a valid set of probabilities. Good for problems where you want to generate a list of predictions.
+    - Tanh - A non-linear activation function that maps input values to a curve ranging strictly between -1 and 1. Due to this, the mean of averages is around 0, which helps models converge faster than Sigmoid.
