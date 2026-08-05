@@ -93,6 +93,8 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 .blocklyFlyoutBackground { fill: #f2f5f9 !important; fill-opacity: 0.97 !important; }
 .blocklyMainBackground { stroke: none !important; fill: #fff !important; }
 .blocklyScrollbarHandle { fill: #c6cfda !important; }
+.blocklyFlyoutScrollbar .blocklyScrollbarHandle { fill-opacity: 0 !important; transition: fill-opacity 120ms ease; }
+.blocklyFlyoutScrollbar:hover .blocklyScrollbarHandle { fill-opacity: .55 !important; }
 .blocklyZoom > image, .blocklyTrash > image { opacity: 0.72; }
 
 .executeBar {
@@ -145,6 +147,16 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 .runStatus.isRunning { color: #174ea6; background: #f0f6ff; border-color: #d9e7ff; }
 .runStatus.isRunning > span { background: var(--blue); animation: pulse 1.3s ease infinite; }
 @keyframes pulse { 50% { opacity: .4; } }
+
+.resultsTabs { margin: -5px 0 16px; padding: 3px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: #f1f4f8; border-radius: 8px; }
+.resultsTabs button { height: 32px; position: relative; color: #707b8c; background: transparent; border: 0; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 650; }
+.resultsTabs button:hover { color: #344054; }
+.resultsTabs button.active { color: #253248; background: white; box-shadow: 0 1px 3px rgba(20, 35, 60, .1); }
+.resultsTabs button > span { width: 5px; height: 5px; position: absolute; top: 7px; right: 8px; background: #22a06b; border-radius: 50%; }
+.resultView { min-height: 300px; }
+.resultView > :last-child { margin-bottom: 0; }
+.resultEmpty { min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; color: #7b8494; text-align: center; }
+.resultEmpty p { max-width: 250px; margin: 0; font-size: 11px; line-height: 1.5; }
 
 .saveForm { padding: 16px; background: var(--surface-soft); border: 1px solid #e8ecf2; border-radius: 10px; }
 .saveForm label { display: block; margin-bottom: 8px; color: #4f5c6d; font-size: 12px; font-weight: 650; }

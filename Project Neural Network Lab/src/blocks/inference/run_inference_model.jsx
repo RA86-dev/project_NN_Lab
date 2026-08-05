@@ -22,6 +22,9 @@ Blockly.Blocks["math_inference_model"] = {
       .appendField("∑ Math inference")
       .appendField("Model ID")
       .appendField(new Blockly.FieldTextInput("Model1"), "MODEL_ID");
+    this.appendDummyInput()
+      .appendField("x =")
+      .appendField(new Blockly.FieldNumber(1), "X_VALUE");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour("#8a6a45");

@@ -36,8 +36,15 @@ function BlocklyEditor({ setWorkspace }) {
       move: { scrollbars: true, drag: true, wheel: true },
     });
 
+    const closeFlyoutAfterInsert = (event) => {
+      if (event.type === Blockly.Events.BLOCK_CREATE) {
+        workspace.getToolbox()?.clearSelection();
+      }
+    };
+    workspace.addChangeListener(closeFlyoutAfterInsert);
     setWorkspace(workspace);
     return () => {
+      workspace.removeChangeListener(closeFlyoutAfterInsert);
       setWorkspace(null);
       workspace.dispose();
     };
@@ -55,6 +62,16 @@ function formatLogPart(value) {
   } catch {
     return String(value);
   }
+}
+
+function formatChartNumber(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  if (Math.abs(number) >= 1000) {
+    return new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 2 }).format(number);
+  }
+  if (Math.abs(number) > 0 && Math.abs(number) < 0.001) return number.toExponential(2);
+  return new Intl.NumberFormat("en", { maximumFractionDigits: 4 }).format(number);
 }
 
 function LossChart({ lossHistory }) {
@@ -101,7 +118,14 @@ function LossChart({ lossHistory }) {
             align: "end",
             labels: { boxWidth: 16, boxHeight: 2, color: "#667085", font: { size: 9 } },
           },
-          tooltip: { displayColors: false, padding: 10 },
+          tooltip: {
+            displayColors: true,
+            padding: 10,
+            callbacks: {
+              title: ([item]) => `Epoch ${item.label}`,
+              label: (item) => `${item.dataset.label}: ${formatChartNumber(item.raw)}`,
+            },
+          },
         },
         scales: {
           x: {
@@ -114,7 +138,11 @@ function LossChart({ lossHistory }) {
             beginAtZero: true,
             border: { display: false },
             grid: { color: "rgba(148, 163, 184, 0.18)" },
-            ticks: { color: "#7b8494", maxTicksLimit: 5 },
+            ticks: {
+              color: "#7b8494",
+              maxTicksLimit: 5,
+              callback: (value) => formatChartNumber(value),
+            },
             title: { display: false },
           },
         },
@@ -431,6 +459,13 @@ function ValidationResult({ result }) {
 
 function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, inferenceResult, validationResult, isRunning }) {
   const lastLoss = lossHistory.at(-1)?.loss;
+  const [activeView, setActiveView] = useState("training");
+  const views = [
+    { id: "training", label: "Training", ready: lossHistory.length > 0 },
+    { id: "neurons", label: "Neurons", ready: activationLayers.length > 0 },
+    { id: "inference", label: "Inference", ready: Boolean(inferenceTarget) },
+    { id: "console", label: "Console", ready: logs.length > 0 },
+  ];
 
   return (
     <section className="resultsPanel" aria-live="polite">
@@ -444,29 +479,55 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
         </div>
       </div>
 
-      <div className="metricRow">
-        <div><span>Epochs</span><strong>{lossHistory.length || "—"}</strong></div>
-        <div><span>Latest loss</span><strong>{lastLoss == null ? "—" : Number(lastLoss).toFixed(4)}</strong></div>
+      <nav className="resultsTabs" aria-label="Output views">
+        {views.map((view) => (
+          <button
+            type="button"
+            key={view.id}
+            className={activeView === view.id ? "active" : ""}
+            onClick={() => setActiveView(view.id)}
+          >
+            {view.label}{view.ready && <span />}
+          </button>
+        ))}
+      </nav>
+
+      <div className="resultView">
+        {activeView === "training" && (
+          <>
+            <div className="metricRow">
+              <div><span>Epochs</span><strong>{lossHistory.length || "—"}</strong></div>
+              <div><span>Latest loss</span><strong>{lastLoss == null ? "—" : formatChartNumber(lastLoss)}</strong></div>
+            </div>
+            <LossChart lossHistory={lossHistory} />
+            <ValidationResult result={validationResult} />
+          </>
+        )}
+
+        {activeView === "neurons" && <ActivationHeatmap layers={activationLayers} />}
+
+        {activeView === "inference" && (
+          inferenceTarget
+            ? <InferencePanel target={inferenceTarget} initialResult={inferenceResult} />
+            : <div className="resultEmpty"><span className="placeholderIcon"><Icon name="spark" /></span><p>Add an inference block after training to use this view.</p></div>
+        )}
+
+        {activeView === "console" && (
+          <>
+            <div className="logHeader">
+              <span>Console</span>
+              <span>{logs.length} {logs.length === 1 ? "entry" : "entries"}</span>
+            </div>
+            <textarea
+              id="logs"
+              aria-label="Execution logs"
+              value={logs.length === 0 ? "Waiting for a run…" : logs.join("\n")}
+              rows={8}
+              readOnly
+            />
+          </>
+        )}
       </div>
-
-      <LossChart lossHistory={lossHistory} />
-
-      <ActivationHeatmap layers={activationLayers} />
-
-      <ValidationResult result={validationResult} />
-      <InferencePanel target={inferenceTarget} initialResult={inferenceResult} />
-
-      <div className="logHeader">
-        <span>Console</span>
-        <span>{logs.length} {logs.length === 1 ? "entry" : "entries"}</span>
-      </div>
-      <textarea
-        id="logs"
-        aria-label="Execution logs"
-        value={logs.length === 0 ? "Waiting for a run…" : logs.join("\n")}
-        rows={8}
-        readOnly
-      />
     </section>
   );
 }
