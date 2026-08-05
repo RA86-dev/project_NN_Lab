@@ -167,6 +167,14 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 .saveForm button { height: 40px; padding: 0 13px; display: inline-flex; align-items: center; gap: 7px; color: #fff; background: #253248; border: 0; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 650; white-space: nowrap; }
 .saveForm button:disabled { opacity: .45; cursor: not-allowed; }
 
+.transferActions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.transferActions button { min-height: 40px; padding: 0 10px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; color: #344054; background: #fff; border: 1px solid #d7dee8; border-radius: 7px; cursor: pointer; font-size: 11px; font-weight: 650; }
+.transferActions button:hover:not(:disabled) { color: var(--blue); border-color: #b9cced; background: #f8fbff; }
+.transferActions button:disabled { opacity: .45; cursor: not-allowed; }
+.transferMessage { margin: 8px 0 0; color: #16704a; font-size: 10px; line-height: 1.4; }
+.transferMessage.isError { color: #b42318; }
+.visuallyHidden { width: 1px; height: 1px; padding: 0; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
 .subsectionHeader { margin: 21px 0 10px; display: flex; align-items: center; justify-content: space-between; color: #344054; font-size: 12px; font-weight: 700; }
 .subsectionHeader > span { display: inline-flex; align-items: center; gap: 7px; }
 .subsectionHeader small { min-width: 23px; padding: 2px 6px; color: #667085; background: #eef1f5; border-radius: 999px; text-align: center; font-size: 10px; }

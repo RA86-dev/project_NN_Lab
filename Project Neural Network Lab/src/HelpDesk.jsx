@@ -3,6 +3,7 @@ import * as Blockly from "blockly";
 import { definitions } from "./definitions";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
+import { ExportImport } from "./Export_Import";
 
 function Icon({ name }) {
   const paths = {
@@ -114,6 +115,8 @@ export function HelpDesk({ workspace }) {
 
       <div className="subsectionHeader"><span>Saved projects</span><small>{files.length}</small></div>
       <SavedFiles workspace={workspace} files={files} />
+
+      <ExportImport workspace={workspace} />
 
       <div className="helpSection">
         <div className="subsectionHeader"><span><Icon name="help" /> Block reference</span></div>
