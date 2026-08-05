@@ -81,6 +81,8 @@ export function compileBlock(block) {
         max: numberField(block, "MAX_X"),
         points: numberField(block, "POINTS"),
       };
+    case "activation_layer":
+      return { type: "activation", activation: textField(block, "ACTIVATION") };
     case "sequential_neural_network":
       return { type: "model", name: textField(block, "MODEL_NAME"), layers: compileChain(inputBlock(block, "LAYERS", false)) };
     case "dense_layer":
@@ -90,6 +92,44 @@ export function compileBlock(block) {
         type: "gru_layer",
         units: numberField(block, "UNITS"),
         return_sequences: block.fields.RETURN_SEQUENCES === true || block.fields.RETURN_SEQUENCES === "TRUE",
+      };
+    case "layer_normalization":
+      return { type: "layer_normalization" };
+    case "batch_normalization":
+      return { type: "batch_normalization" };
+    case "conv2d_layer":
+      return {
+        type: "conv2d",
+        filters: numberField(block, "FILTERS"),
+        kernelSize: numberField(block, "KERNEL_SIZE"),
+        strides: numberField(block, "STRIDES"),
+        padding: textField(block, "PADDING"),
+        activation: textField(block, "ACTIVATION")
+      };
+    case "max_pooling2d_layer":
+      return {
+        type: "max_pooling2d",
+        poolSize: numberField(block, "POOL_SIZE"),
+        strides: numberField(block, "STRIDES")
+      };
+    case "lstm_layer":
+      return {
+        type: "lstm_layer",
+        units: numberField(block, "UNITS"),
+        return_sequences: block.fields.RETURN_SEQUENCES === true || block.fields.RETURN_SEQUENCES === "TRUE",
+        activation: textField(block, "ACTIVATION")
+      };
+    case "dropout_layer":
+      return {
+        type: "dropout_layer",
+        dropoutRate: numberField(block, "DROPOUT_RATE")
+      };
+    case "embedding_layer":
+      return {
+        type: "embedding_layer",
+        dimensions: numberField(block, "Dimensions"),
+        outputDim: numberField(block, "Output_Dim"),
+        inputLength: numberField(block, "Input Length")
       };
     default:
       fail("Unknown block " + block.type);
@@ -173,29 +213,109 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
   units: ${node.units},
   returnSequences: ${node.return_sequences ?? false}${context.inputShape ? `,\n  inputShape: ${JSON.stringify(context.inputShape)}` : ""}
 })`;
-
+    case "layer_normalization":
+      return `tf.layers.layerNormalization()`;
+    case "batch_normalization":
+      return `tf.layers.batchNormalization()`;
     case "model": {
       const dataset = context.dataset;
       const layers = [...node.layers];
-      const sequenceInput = layers[0]?.type === "gru_layer";
+      const sequenceInput =
+  layers[0]?.type === "gru_layer" ||
+  layers[0]?.type === "lstm_layer";
       const inputShape = sequenceInput
         ? dataset.inputShape.length === 1 ? [1, dataset.inputShape[0]] : dataset.inputShape.slice(0, 2)
         : dataset.inputShape;
-
-      if (dataset.inputShape.length === 3 && !sequenceInput) layers.unshift({ type: "flatten" });
       const hasOutput = layers.at(-1)?.type === "dense" && layers.at(-1)?.units === dataset.outputShape[0];
       if (!hasOutput) {
         layers.push({ type: "dense", units: dataset.outputShape[0], activation: dataset.task === "regression" ? "linear" : "softmax" });
+      }
+      const firstDenseIndex = layers.findIndex(layer => layer.type === "dense");
+      if (dataset.inputShape.length === 3 && !sequenceInput && firstDenseIndex !== -1) {
+        layers.splice(firstDenseIndex, 0, { type: "flatten" });
       }
 
       const compiledLayers = [];
       for (let index = 0; index < layers.length;) {
         const layer = layers[index];
         if (layer.type === "flatten") {
-          compiledLayers.push(`tf.layers.flatten({ inputShape: ${JSON.stringify(dataset.inputShape)} })`);
+          const first = index === 0;
+          compiledLayers.push(`tf.layers.flatten(${first ? `{ inputShape: ${JSON.stringify(dataset.inputShape)} }` : ""})`);
           index += 1;
           continue;
         }
+        if (layer.type === "layer_normalization") {
+          compiledLayers.push(`tf.layers.layerNormalization()`);
+        } else if (layer.type === "batch_normalization") {
+          compiledLayers.push(`tf.layers.batchNormalization()`);
+        } else if (layer.type === "activation_layer") {
+          compiledLayers.push(`tf.layers.activation({ activation: ${JSON.stringify(layer.activation)}, inputShape: ${JSON.stringify(inputShape)} })`);
+        } else if (layer.type === "conv2d") {
+          compiledLayers.push(`tf.layers.conv2d({
+            filters: ${layer.filters},
+            kernelSize: ${layer.kernelSize},
+            strides: ${layer.strides},
+            padding: ${JSON.stringify(layer.padding)},
+            activation: ${JSON.stringify(layer.activation)},
+            inputShape: ${JSON.stringify(inputShape)}
+          })`);
+
+        } else if (layer.type === "max_pooling2d") {
+          compiledLayers.push(`tf.layers.maxPooling2d({
+            poolSize: ${layer.poolSize},
+            strides: ${layer.strides},
+            inputShape: ${JSON.stringify(inputShape)}
+          })`);
+        } else if (layer.type === "dropout_layer") {
+          compiledLayers.push(`tf.layers.dropout({ rate: ${layer.dropoutRate} })`);
+        } else if (layer.type === "embedding_layer") {
+          compiledLayers.push(`tf.layers.embedding({
+            inputDim: ${layer.dimensions},
+            outputDim: ${layer.outputDim},
+            inputLength: ${layer.inputLength}
+          })`);
+        }
+        if (layer.type === "lstm_layer") {
+            let end = index + 1;
+
+            while (layers[end]?.type === "lstm_layer") {
+              end += 1;
+            }
+
+            const group = layers.slice(index, end);
+
+            if (group.length > 1) {
+              const cells = group
+                .map(
+                  item => `tf.layers.lstmCell({
+                    units: ${item.units},
+                    activation: ${JSON.stringify(item.activation)}
+                  })`
+                )
+                .join(",");
+
+              compiledLayers.push(`tf.layers.rnn({
+                cell: [${cells}],
+                returnSequences: ${group.at(-1).return_sequences ?? false}
+                ${index === 0
+                  ? `, inputShape: ${JSON.stringify(inputShape)}`
+                  : ""}
+              })`);
+            } else {
+              compiledLayers.push(`tf.layers.lstm({
+                units: ${layer.units},
+                returnSequences: ${layer.return_sequences ?? false},
+                activation: ${JSON.stringify(layer.activation)}
+                ${index === 0
+                  ? `, inputShape: ${JSON.stringify(inputShape)}`
+                  : ""}
+              })`);
+            }
+
+            index = end;
+            continue;
+          }
+
         if (layer.type === "dense") {
           const first = index === 0 && layers[0].type !== "flatten";
           compiledLayers.push(`tf.layers.dense({ units: ${layer.units}, activation: ${JSON.stringify(layer.activation)}${first ? `, inputShape: ${JSON.stringify(dataset.inputShape)}` : ""} })`);
@@ -222,7 +342,9 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
 
     case "train": {
       const dataset = node.dataset;
-      const sequenceInput = node.model.layers[0]?.type === "gru_layer";
+      const sequenceInput =
+    node.model.layers[0]?.type === "gru_layer" ||
+    node.model.layers[0]?.type === "lstm_layer";
       const classification = dataset.task === "classification";
       const loss = classification ? "categoricalCrossentropy" : "meanSquaredError";
       const metrics = classification ? `, metrics: ["accuracy"]` : "";

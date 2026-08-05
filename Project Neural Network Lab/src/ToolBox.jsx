@@ -7,6 +7,13 @@ import "./blocks/layers/GRUModel"
 import "./blocks/training/train"
 import "./blocks/inference/run_inference_model"
 import "./blocks/inference/validate_model"
+import "./blocks/normalization_layers/BatchNormalization"
+import "./blocks/normalization_layers/LayerNormalization"
+import "./blocks/layers/ActivationLayer"
+import "./blocks/layers/Conv2D"
+import "./blocks/layers/MaxPooling2D"
+import "./blocks/layers/LSTM"
+import "./blocks/layers/embedding"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -34,6 +41,21 @@ contents: [
 },
 {
     kind: "category",
+    name: "Normalization Layers",
+    colour: "#eaffa5",
+    contents: [
+        {
+            kind: "block",
+            type: "batch_normalization"
+        },
+        {
+            kind: "block",
+            type: "layer_normalization"
+        }
+    ]
+},
+{
+    kind: "category",
     name: "Neural Network Layers",
     colour: "#995ba5",
     contents: [
@@ -44,9 +66,30 @@ contents: [
         {
             kind: "block",
             type: "gru_layer"
+        },
+        {
+            kind: "block",
+            type: "activation_layer"
+        },
+        {
+            kind: "block",
+            type: "conv2d_layer"
+        },
+        {
+            kind: "block",
+            type: "max_pooling2d_layer"
+        },
+        {
+            kind: "block",
+            type: "lstm_layer"
+        },
+        {
+            kind: "block",
+            type: "embedding_layer"
         }
     ]
 },
+
 {
     kind: "category",
     name: "Inference",
