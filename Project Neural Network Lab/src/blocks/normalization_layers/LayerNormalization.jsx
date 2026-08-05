@@ -10,7 +10,7 @@ Blockly.Blocks["layer_normalization"] = {
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 
-    this.setColour("#eaffa5");
+    this.setColour("#586c15");
     this.setTooltip("A layer normalization block");
     this.setHelpUrl("");
   }

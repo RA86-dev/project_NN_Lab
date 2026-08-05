@@ -24,6 +24,7 @@ Currently, the following has been added:
 - Two Datasets:
     - MNIST (**VERY LAGGY**)
     - Synthetic Math Dataset Generator
+    - JSON Datasets acceptable through a new block.
 ## Requirements
 - NodeJS
 - npm
@@ -37,7 +38,8 @@ git clone https://github.com/RA86-dev/project_NN_Lab
 cd project_NN_Lab/Project\ Neural\ Network\ Lab/ 
 
 npm install 
-npm run dev # FOR NON PRODUCTION
+npm run dev 
+# FOR NON PRODUCTION
 # FOR PRODUCTION:
 npm run build
 npm run start
@@ -46,7 +48,7 @@ npm run start
 
 
 ## License
-Licensed under MIT [here](LICENSE)
+Licensed under ISC/MIT [here](LICENSE)
 ## AI Use Declaration
 In this project, AI was used for the user interface and debugging issues along with writing some functions to help.
 ## Example Image
@@ -64,9 +66,9 @@ Every "fancy" word is listed here, along with a simplified definition.
 - Activation Layer - A mathematical formula inside of a neural network. It decides whether the node should fire, or to pass the signal. It basically just adds nonlinearity.
 - Conv2d - Conv2d is a neural network architecture style, that basically identifies patterns in a 2d shape (thats where the "2d" in the name comes from). Its goal is to basically spot potential patterns, so its used for neural networks to be able to identify patterns.
 - Dense Layer - A dense layer is basically a layer where everything is connected. In some other architectures, such as MoE (Mixture of Experts), not all parameters are connected to make it more efficient. This is the most common block used in AI and Machine Learning.
-- Dropout Layer - This layer effectively turns off a certain percentage of connections. This is used for testing models or to train models to be more compressed.
+- Dropout Layer - This layer effectively turns off a certain percentage of connections. This is used for testing models or to train models to be more compressed. DURING TRAINING. In actual inference, it does not do this.
 - GRU - GRU means Gated Recurrent Unit. It is a simpler version of a LSTM, and has "gates" to control things like how much past information to keep for the future, how much to forget, and a hidden state to merge the short term and long term memory into one. For LSTM and GRUs, you need to turn on return sequences for if there are more layers underneath it.
-- Recurrent Neural Network (RNN) - A recursive model. It repeats over and over its data to identify every single aspect. This makes it better for data analysis, however suffers from short term memory issues.
+- Recurrent Neural Network (RNN) - A model that processes data by repeatedly updating a internal state.
 - LSTM - A special form of a Recurrent Neural Network designed to remember information over long sequences. Traditional RNNs suffer from the vanishing gradient problem, which basically means that it forgets short term data, however, this one does not. However, these are slower than Traditional RNNs.
 - Embedding Layer - A layer which basically converts each word into a token for the AI model. This is useful for Transformers, which is used in large LLMs (Generative* AI models).
 - MaxPooling2D - Downsamples the input using the maximum value. Its used to shrink spacial dimensions while keeping the most "dominant" features and decrease computation times.
@@ -74,7 +76,7 @@ Every "fancy" word is listed here, along with a simplified definition.
 - Normalization - This basically shrinks all of the data to a common range, to prevent large features from overpowering smaller features.
 - Batch Normalization - Standardizes the inputs to each layer of a neural network.
 - Layer Normalization - Instead of normalizing across a batch of data (Batch Normalization), it calculates the mean and variability across the features of a training example.
-- MNIST dataset - The MNIST dataset is a 74,000 digit dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
+- MNIST dataset - The MNIST dataset is a 70,000 images dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
 
 Here's a example model:
 

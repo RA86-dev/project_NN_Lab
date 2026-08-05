@@ -10,7 +10,7 @@ Blockly.Blocks["batch_normalization"] = {
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 
-    this.setColour("#54ff95");
+    this.setColour("#1f8546");
     this.setTooltip("A batch normalization block");
     this.setHelpUrl("");
   }
