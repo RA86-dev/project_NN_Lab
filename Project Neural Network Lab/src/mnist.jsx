@@ -3,7 +3,7 @@ import * as tf from "@tensorflow/tfjs";
 export async function loadMNIST(dataset_size) {
     console.log("Downloading MNIST");
     const response = await fetch(
-        "/mnist_handwritten_test.json"
+        "https://raw.githubusercontent.com/RA86-dev/project_NN_Lab/refs/heads/main/Project%20Neural%20Network%20Lab/public/mnist_handwritten_test.json"
     );
     const dataset = await response.json();
     console.log(
