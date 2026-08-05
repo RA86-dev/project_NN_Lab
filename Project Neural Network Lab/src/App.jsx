@@ -74,9 +74,23 @@ function formatChartNumber(value) {
   return new Intl.NumberFormat("en", { maximumFractionDigits: 4 }).format(number);
 }
 
+function usePrefersDarkMode() {
+  const [isDark, setIsDark] = useState(() => window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (event) => setIsDark(event.matches);
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
+  }, []);
+
+  return isDark;
+}
+
 function LossChart({ lossHistory }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
+  const isDark = usePrefersDarkMode();
 
   useEffect(() => {
     chartRef.current = new Chart(canvasRef.current, {
@@ -87,8 +101,8 @@ function LossChart({ lossHistory }) {
           {
             label: "Training loss",
             data: [],
-            borderColor: "#2563eb",
-            backgroundColor: "rgba(37, 99, 235, 0.06)",
+            borderColor: isDark ? "#60a5fa" : "#2563eb",
+            backgroundColor: isDark ? "rgba(96, 165, 250, 0.08)" : "rgba(37, 99, 235, 0.06)",
             borderWidth: 2,
             pointRadius: 0,
             pointHoverRadius: 4,
@@ -98,7 +112,7 @@ function LossChart({ lossHistory }) {
           {
             label: "Validation loss",
             data: [],
-            borderColor: "#ea580c",
+            borderColor: isDark ? "#fb923c" : "#ea580c",
             borderDash: [5, 4],
             borderWidth: 1.5,
             pointRadius: 0,
@@ -116,7 +130,7 @@ function LossChart({ lossHistory }) {
           legend: {
             display: true,
             align: "end",
-            labels: { boxWidth: 16, boxHeight: 2, color: "#667085", font: { size: 9 } },
+            labels: { boxWidth: 16, boxHeight: 2, color: isDark ? "#a8b3c3" : "#667085", font: { size: 9 } },
           },
           tooltip: {
             displayColors: true,
@@ -131,15 +145,15 @@ function LossChart({ lossHistory }) {
           x: {
             grid: { display: false },
             border: { display: false },
-            ticks: { color: "#7b8494", maxTicksLimit: 8 },
+            ticks: { color: isDark ? "#8995a7" : "#7b8494", maxTicksLimit: 8 },
             title: { display: false },
           },
           y: {
             beginAtZero: true,
             border: { display: false },
-            grid: { color: "rgba(148, 163, 184, 0.18)" },
+            grid: { color: isDark ? "rgba(148, 163, 184, 0.12)" : "rgba(148, 163, 184, 0.18)" },
             ticks: {
-              color: "#7b8494",
+              color: isDark ? "#8995a7" : "#7b8494",
               maxTicksLimit: 5,
               callback: (value) => formatChartNumber(value),
             },
@@ -153,7 +167,7 @@ function LossChart({ lossHistory }) {
       chartRef.current?.destroy();
       chartRef.current = null;
     };
-  }, []);
+  }, [isDark]);
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -177,7 +191,7 @@ function LossChart({ lossHistory }) {
 }
 
 function activationColor(value, maxMagnitude) {
-  if (value == null) return "#eef1f5";
+  if (value == null) return "var(--heatmap-empty)";
   const strength = Math.min(Math.abs(value) / (maxMagnitude || 1), 1);
   const alpha = 0.12 + strength * 0.82;
   return value < 0
@@ -457,7 +471,7 @@ function ValidationResult({ result }) {
   );
 }
 
-function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, inferenceResult, validationResult, isRunning }) {
+function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, inferenceResult, validationResult }) {
   const lastLoss = lossHistory.at(-1)?.loss;
   const [activeView, setActiveView] = useState("training");
   const views = [
@@ -637,6 +651,7 @@ function App() {
           <strong>Neural Network Lab</strong>
           <span>A easy-to-use visual model builder for simple neural networks.</span>
         </div>
+
         <div className="headerMeta">
           <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">GitHub</a>
         </div>
@@ -646,8 +661,8 @@ function App() {
         <section className="workspacePanel">
           <div className="workspaceHeading">
             <div>
-              <p className="eyebrow">Workspace</p>
-              <h1>Build your network</h1>
+
+              <h1>Build a Neural Network</h1>
             </div>
             <p>Drag blocks from the library and connect them into a training pipeline. First, always start with the Main Program input block. Connect all other blocks using that. For inference using a model, please set a decent name for it.</p>
           </div>

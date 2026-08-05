@@ -85,6 +85,7 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 .blocklyEditor { width: 100%; height: min(57vh, 620px); min-height: 420px; }
 
 /* Blockly gets a light visual tune-up without replacing its useful conventions. */
+.blocklyToolbox,
 .blocklyToolboxDiv { background: #f8fafc !important; border-right: 1px solid #e3e8ef; padding: 10px 7px !important; }
 .blocklyTreeRow { height: 38px !important; margin: 2px 0 !important; padding: 0 12px 0 8px !important; border-radius: 7px; }
 .blocklyTreeLabel { color: #526071 !important; font-family: inherit !important; font-size: 13px !important; }
@@ -257,6 +258,103 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 
 footer { padding: 0 20px 28px; color: #98a2b3; text-align: center; font-size: 10px; letter-spacing: .02em; }
 footer span { margin: 0 5px; color: #c3cad4; }
+
+@media (prefers-color-scheme: dark) {
+  .appShell { background: #0f141c; }
+  .appHeader { background: rgba(15, 20, 28, .92); }
+  .brandMark { color: #dbeafe; background: #24324a; }
+  .headerMeta a { color: #aab5c5; }
+  .localBadge, .runStatus { color: #a8b3c3; }
+
+  .canvasFrame,
+  .executeBar { background: #171e28; border-color: #303a49; box-shadow: 0 14px 36px rgba(0, 0, 0, .22); }
+  .executeBar { border-top-color: #252e3a; }
+  .executeBar p { color: #8d99aa; }
+  .shortcut { color: #b2bdcc; background: #222b37; border-color: #35404f; }
+  .executeButton:disabled { color: #758195; background: #29323f; }
+
+  .blocklyToolbox,
+  .blocklyToolboxDiv { background: #151c25 !important; border-right-color: #2b3542; }
+  .blocklyTreeLabel { color: #aeb8c7 !important; }
+  .blocklyTreeSelected { background: #203453 !important; }
+  .blocklyTreeSelected .blocklyTreeLabel { color: #bfdbfe !important; }
+  .blocklyFlyoutBackground { fill: #18202a !important; }
+  .blocklyMainBackground { fill: #10161f !important; }
+  .blocklyGridPattern line { stroke: #263140 !important; }
+  .blocklyScrollbarHandle { fill: #465366 !important; }
+  .blocklyZoom > image,
+  .blocklyTrash > image { filter: invert(1); opacity: .62; }
+
+  .toolsHelpDesk,
+  .resultsPanel { box-shadow: 0 8px 24px rgba(0, 0, 0, .16); }
+  .runStatus { color: #9ed9b9; background: #14251e; border-color: #254536; }
+  .runStatus.isRunning { color: #bfdbfe; background: #172a46; border-color: #284a77; }
+  .resultsTabs { background: #111821; }
+  .resultsTabs button { color: #8f9bad; }
+  .resultsTabs button:hover { color: #dce3ed; }
+  .resultsTabs button.active { color: #edf2f8; background: #283240; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); }
+  .resultEmpty { color: #8f9bad; }
+
+  .saveForm,
+  .metricRow > div,
+  .activationInspector { background: #111821; border-color: #293341; }
+  .saveForm label,
+  .subsectionHeader,
+  .inspectorTitle { color: #c4cedb; }
+  .saveForm input,
+  .activationHeader select,
+  .inferenceForm input { color: #e2e8f0; background: #171f2a; border-color: #354151; }
+  .saveForm input::placeholder,
+  .inferenceForm input::placeholder { color: #6f7b8d; }
+  .saveForm button { background: #334155; }
+  .subsectionHeader small,
+  .savedFileList button > span:first-child,
+  .emptyFiles > span,
+  .placeholderIcon,
+  .inferenceHeading > span { color: #a6b1c1; background: #26303d; }
+  .emptyFiles { color: #8e9aab; background: #121922; border-color: #35404f; }
+  .emptyFiles p { color: #c3cdd9; }
+  .savedFileList button { color: #cbd5e1; background: #171e28; border-color: #2c3644; }
+  .savedFileList button:hover { background: #202936; border-color: #465366; }
+  .blockDefinition { color: #9da9ba; background: #111821; border-color: #293341; }
+  .blockDefinition.hasSelection { color: #c9d3df; }
+  .blockDefinition code { color: #d8e1ec; background: #26303d; }
+
+  .metricRow span,
+  .chartPlaceholder,
+  .activationHeader small,
+  .activationHeader label,
+  .heatmapMeta,
+  .heatmapLegend,
+  .heatmapEmpty { color: #8f9bad; }
+  .metricRow strong,
+  .heatmapMeta span:first-child { color: #d5dde8; }
+  .activationHeader select:disabled { color: #758195; background: #202936; }
+  .heatmapGrid > span { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .035); }
+  .heatmapGrid > span:hover { outline-color: #dce3ed; }
+
+  .inferencePanel { background: #151c25; border-color: #2c3745; box-shadow: 0 5px 16px rgba(0, 0, 0, .18); }
+  .inferenceHeading h3,
+  .validationResult h3,
+  .numericPrediction strong { color: #e2e8f0; }
+  .inferenceForm label,
+  .numericPrediction span,
+  .predictedDigit span,
+  .predictedDigit small,
+  .probabilityList > div { color: #9da9ba; }
+  .secondaryButton { color: #c3cdd9; background: #202936; border-color: #3a4656; }
+  .inferenceError { color: #fca5a5; background: #35191b; border-color: #612a2e; }
+  .numericPrediction { background: #14233a; }
+  .mnistPad canvas { border-color: #303b49; }
+  .predictedDigit { background: #14233a; border-color: #27466f; }
+  .probabilityList i { background: #293341; }
+
+  .validationResult { background: #14231c; border-color: #294436; }
+  .validationResult dt { color: #91a69a; }
+  .validationResult dd { color: #b9ddc8; }
+  footer { color: #6f7b8d; }
+  footer span { color: #465264; }
+}
 
 @media (max-width: 900px) {
   main { padding-top: 28px; }
