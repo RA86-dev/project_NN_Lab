@@ -3,7 +3,7 @@ import * as Blockly from "blockly";
 Blockly.Blocks["text_inference_model"] = {
   init() {
     this.appendDummyInput()
-      .appendField("⌨ Raw inference")
+      .appendField("Raw inference")
       .appendField("Model ID")
       .appendField(new Blockly.FieldTextInput("Model1"), "MODEL_ID");
     this.appendDummyInput()

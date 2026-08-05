@@ -5,7 +5,7 @@ Blockly.Blocks["train_model"] = {
 
     this.appendValueInput("MODEL")
         .setCheck("MODEL")
-        .appendField("⚙ Train Model")
+        .appendField("Train Model")
         .appendField("Model:");
 
     this.appendValueInput("DATASET")

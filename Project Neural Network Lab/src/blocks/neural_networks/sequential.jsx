@@ -4,7 +4,7 @@ Blockly.Blocks["sequential_neural_network"] = {
   init: function () {
 
     this.appendDummyInput()
-        .appendField("🧠 Sequential Neural Network");
+        .appendField("Sequential Neural Network");
 
     this.appendDummyInput()
         .appendField("Name:")
