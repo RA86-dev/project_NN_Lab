@@ -20,9 +20,9 @@ Currently, the following has been added:
 ## Installation
 ```bash
 git clone https://github.com/RA86-dev/project_NN_Lab
-cd project_NN_Lab/Project\ Neural\ Network\ Lab/ # Sorry, accidentally initialized in folder with already git, so sorry about this!
-npm install # Install all packages
-npm run dev # to start.
+cd project_NN_Lab/Project\ Neural\ Network\ Lab/ 
+npm install 
+npm run dev 
 
 ```
 ## License
