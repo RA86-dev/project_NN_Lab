@@ -1,6 +1,5 @@
-# Simple workflow for deploying a Vite project in a subfolder to GitHub Pages
-name: Deploy Vite app to Pages
 
+name: Deploy Vite app to Pages
 on:
   push:
     branches: ["main"]
@@ -42,7 +41,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload only the built files from your subfolder's dist directory
           path: './Project Neural Network Lab/dist'
 
       - name: Deploy to GitHub Pages

@@ -474,9 +474,6 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
           <p className="eyebrow">Output</p>
           <h2>Training results</h2>
         </div>
-        <div className={`runStatus ${isRunning ? "isRunning" : ""}`}>
-          <span />{isRunning ? "Running" : "Ready"}
-        </div>
       </div>
 
       <nav className="resultsTabs" aria-label="Output views">
