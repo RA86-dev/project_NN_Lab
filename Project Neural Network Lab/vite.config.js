@@ -9,4 +9,5 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss()
   ],
+  base: '/project_NN_Lab/',
 })
