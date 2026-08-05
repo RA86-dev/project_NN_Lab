@@ -81,6 +81,12 @@ export function compileBlock(block) {
         max: numberField(block, "MAX_X"),
         points: numberField(block, "POINTS"),
       };
+    case "multihead_attention":
+      return {
+        type: "multihead_attention",
+        heads: numberField(block, "HEADS"),
+        keyDimensions: numberField(block, "DIMENSION")
+      };
     case "activation_layer":
       return { type: "activation", activation: textField(block, "ACTIVATION") };
     case "sequential_neural_network":
@@ -273,6 +279,11 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             inputDim: ${layer.dimensions},
             outputDim: ${layer.outputDim},
             inputLength: ${layer.inputLength}
+          })`);
+        } else if (layer.type === "multihead_attention") {
+          compiledLayers.push(`tf.layers.multiHeadAttention({
+            num_heads: ${layer.heads},
+            key_dim: ${layer.keyDimensions}
           })`);
         }
         if (layer.type === "lstm_layer") {

@@ -14,6 +14,7 @@ import "./blocks/layers/Conv2D"
 import "./blocks/layers/MaxPooling2D"
 import "./blocks/layers/LSTM"
 import "./blocks/layers/embedding"
+import "./blocks/layers/multihead_attention"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -82,6 +83,10 @@ contents: [
         {
             kind: "block",
             type: "lstm_layer"
+        },
+        {
+            kind: "block",
+            type: "multihead_attention"
         },
         {
             kind: "block",

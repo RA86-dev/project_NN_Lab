@@ -7,7 +7,7 @@ A blockly based (*Scratch-style engine*) that allows you to run neural network m
 Currently, the following has been added:
 - Blockly Engine
 - Sequential Neural Network 
-- Two Layers:
+- Multiple Layers:
     - GRU
     - Dense Layers
     - Activation Layer
@@ -16,6 +16,7 @@ Currently, the following has been added:
     - Dropout Layer
     - Embedding Layer
     - LSTM Layer
+    - **Beta**: *Multi-head Attention* (Will be finished by EOD)
 - Normalization Layers
     - BatchNormalization
     - LayerNormalization
