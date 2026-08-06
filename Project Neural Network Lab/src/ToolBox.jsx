@@ -20,6 +20,9 @@ import "./blocks/layers/multihead_attention"
 import "./blocks/layers/GaussianNoise"
 import "./blocks/layers/RecurrentNeuralNetwork"
 import "./blocks/layers/DropoutLayer"
+import "./blocks/layers/AlphaDropout"
+import "./blocks/layers/leakyReLU"
+import "./blocks/layers/GlobalAveragePooling"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -75,11 +78,23 @@ contents: [
         },
         {
             kind: "block",
+            type: "alpha_dropout_layer"
+        },
+        {
+            kind: "block",
             type: "activation_layer"
         },
         {
             kind: "block",
             type: "conv2d_layer"
+        },
+        {
+            kind: "block",
+            type: "leakyReLU"
+        },
+        {
+            kind: "block",
+            type: "GlobalAveragePooling2D"
         },
         {
             kind: "block",

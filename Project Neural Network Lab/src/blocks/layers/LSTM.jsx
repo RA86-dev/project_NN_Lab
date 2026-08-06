@@ -23,9 +23,17 @@ Blockly.Blocks["lstm_layer"] = {
     .appendField("Activation:")
     .appendField(
         new Blockly.FieldDropdown([
-            ["tanh", "tanh"],
-            ["relu", "relu"],
-            ["sigmoid", "sigmoid"]
+            ['ELU', 'elu'],
+            ['Hard Sigmoid', 'hardSigmoid'],
+            ['Linear', 'linear'],
+            ['ReLU', 'relu'],
+            ['ReLU6', 'relu6'],
+            ['SELU', 'selu'],
+            ['Sigmoid', 'sigmoid'],
+            ['Softmax', 'softmax'],
+            ['Softplus', 'softplus'],
+            ['Softsign', 'softsign'],
+            ['Tanh', 'tanh']
         ]),
         "ACTIVATION"
     );

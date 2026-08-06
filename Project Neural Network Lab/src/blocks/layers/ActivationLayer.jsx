@@ -11,21 +11,17 @@ Blockly.Blocks["activation_layer"] = {
         .appendField("Activation:")
         .appendField(
             new Blockly.FieldDropdown([
-                ['elu','elu'],
-                ['Hard Sigmoid','hardSigmoid'],
-                ['Linear','linear'],
-                ['ReLU','relu'],
-                ['ReLU6','relu6'],
-                ['SELU','selu'],
-                ['Sigmoid','sigmoid'],
-                ['Softmax','softmax'],
-                ['Softplus','softplus'],
-                ['Softsign','softsign'],
-                ['Tanh','tanh'],
-                ['Swish','swish'],
-                ['Mish','mish'],
-                ['GELU','gelu'],
-                ['GELU (New)','gelu_new']
+                ['ELU', 'elu'],
+                ['Hard Sigmoid', 'hardSigmoid'],
+                ['Linear', 'linear'],
+                ['ReLU', 'relu'],
+                ['ReLU6', 'relu6'],
+                ['SELU', 'selu'],
+                ['Sigmoid', 'sigmoid'],
+                ['Softmax', 'softmax'],
+                ['Softplus', 'softplus'],
+                ['Softsign', 'softsign'],
+                ['Tanh', 'tanh']
             ]),
             "ACTIVATION"
         );
