@@ -17,14 +17,24 @@ Blockly.Blocks["dense_layer"] = {
         .appendField("Activation:")
         .appendField(
             new Blockly.FieldDropdown([
-                ["ReLU", "relu"],
-                ["Sigmoid", "sigmoid"],
-                ["Softmax", "softmax"],
-                ["Tanh", "tanh"],
-                ["None", "linear"]
+                ['elu','elu'],
+                ['Hard Sigmoid','hardSigmoid'],
+                ['Linear','linear'],
+                ['ReLU','relu'],
+                ['ReLU6','relu6'],
+                ['SELU','selu'],
+                ['Sigmoid','sigmoid'],
+                ['Softmax','softmax'],
+                ['Softplus','softplus'],
+                ['Softsign','softsign'],
+                ['Tanh','tanh'],
+                ['Swish','swish'],
+                ['Mish','mish'],
+                ['GELU','gelu'],
+                ['GELU (New)','gelu_new']
             ]),
             "ACTIVATION"
-        );
+        )
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
