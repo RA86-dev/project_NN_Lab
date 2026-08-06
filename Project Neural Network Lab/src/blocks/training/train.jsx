@@ -35,7 +35,12 @@ Blockly.Blocks["train_model"] = {
         .appendField(
             new Blockly.FieldDropdown([
                 ["Categorical Crossentropy", "categoricalCrossentropy"],
-                ["Mean Squared Error", "meanSquaredError"]
+                ["Mean Squared Error", "meanSquaredError"],
+                ["Mean Absolute Error", "meanAbsoluteError"],
+                ["Binary Crossentropy", "binaryCrossentropy"],
+                ["Huber Loss", "huberLoss"],
+                ["Sparse Categorical Crossentropy", "sparseCategoricalCrossentropy"]
+
             ]),
             "LOSS_FUNCTION"
         );
