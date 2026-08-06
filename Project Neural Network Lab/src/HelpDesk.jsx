@@ -25,8 +25,12 @@ function loadList() {
   }
 }
 export function addDefaultItems() {
-  let current_list = loadList();
-  if (current_list.length === 0 || !current_list.includes(["MNIST Template Project"])) {
+  const currentList = loadList();
+  const uniqueList = currentList.filter((file, index, files) =>
+    file?.localStorageName &&
+    files.findIndex((candidate) => candidate?.localStorageName === file.localStorageName) === index
+  );
+  if (!uniqueList.some((file) => file.localStorageName === "MNIST Template Project")) {
     localStorage.setItem("MNIST Template Project", JSON.stringify(
       {
   "blocks": {
@@ -121,9 +125,10 @@ export function addDefaultItems() {
   }
 }
     ))
-    current_list.push({ localStorageName: "MNIST Template Project" });
-    localStorage.setItem("data_stored", JSON.stringify(current_list));
+    uniqueList.push({ localStorageName: "MNIST Template Project" });
   }
+  localStorage.setItem("data_stored", JSON.stringify(uniqueList));
+  return uniqueList;
 }
 export function getCurrentCode(workspace) {
   if (!workspace) return null;
@@ -161,10 +166,9 @@ function SavedFiles({ workspace, files }) {
 }
 
 export function HelpDesk({ workspace }) {
-  addDefaultItems();
   const [selectedDefinition, setSelectedDefinition] = useState("");
   const [fileName, setFileName] = useState("");
-  const [files, setFiles] = useState(loadList);
+  const [files, setFiles] = useState(addDefaultItems);
 
   useEffect(() => {
     if (!workspace) return undefined;
@@ -227,5 +231,6 @@ export function HelpDesk({ workspace }) {
         </div>
       </div>
     </aside>
+
   );
 }
