@@ -8,7 +8,7 @@ const shapePreservingLayerTypes = new Set([
   "batch_normalization",
   "dropout_layer",
   "gaussian_noise",
-]);
+]); // TODO: Check for anymore "shape preserving and seq layer type"
 
 function modelUsesSequenceInput(layers) {
   const shapeDefiningLayer = layers.find(
@@ -42,13 +42,8 @@ function compileChain(block) {
   return result;
 }
 
-function numberField(block, name) {
-  return Number(block.fields[name]);
-}
-
-function textField(block, name) {
-  return String(block.fields[name] ?? "");
-}
+function numberField(block, name) {return Number(block.fields[name]);}
+function textField(block, name) {return String(block.fields[name] ?? "");}
 
 function compileMathExpression(block) {
   if (!block) return { type: "math_variable" };
@@ -187,16 +182,11 @@ export function compileBlock(block) {
         units: numberField(block, "UNITS"),
         return_sequences: block.fields.RETURN_SEQUENCES === true || block.fields.RETURN_SEQUENCES === "TRUE",
       };
-    case "layer_normalization":
-      return { type: "layer_normalization" };
-    case "batch_normalization":
-      return { type: "batch_normalization" };
-    case "GlobalAveragePooling2D":
-      return { type: "global_average_pooling2d" };
-    case "reshape_layer":
-      return { type: "reshape", shape: textField(block, "SHAPE") };
-    case "alpha_dropout_layer":
-      return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
+    case "layer_normalization": return { type: "layer_normalization" };
+    case "batch_normalization": return { type: "batch_normalization" };
+    case "GlobalAveragePooling2D": return { type: "global_average_pooling2d" };
+    case "reshape_layer": return { type: "reshape", shape: textField(block, "SHAPE") };
+    case "alpha_dropout_layer": return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
     case "conv2d_layer":
       return {
         type: "conv2d",
@@ -415,26 +405,15 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             num_heads: ${layer.heads},
             key_dim: ${layer.keyDimensions}${firstInputShape()}
           })`);
-        } // uhm
-        else if (
-          layer.type == "gaussian_noise"
-        ) {
+        }  else if (layer.type == "gaussian_noise") {
           compiledLayers.push(`tf.layers.gaussianNoise({ stddev: ${layer.stddev}${firstInputShape()} })`);
-        } else if (
-          layer.type === "alpha_dropout_layer"
-        ) {
+        } else if (layer.type === "alpha_dropout_layer") {
           compiledLayers.push(`tf.layers.alphaDropout({ rate: ${layer.rate}${firstInputShape()} })`);
-        } else if (
-          layer.type == "leakyReLU"
-        ) {
+        } else if (layer.type == "leakyReLU") {
           compiledLayers.push(`tf.layers.leakyReLU({ alpha: ${layer.alpha}${firstInputShape()} })`);
-        } else if (
-          layer.type == "reshape_layer"
-        ) {
+        } else if (layer.type == "reshape_layer") {
           compiledLayers.push(`tf.layers.reshape({ shape: ${JSON.stringify(layer.shape)}${firstInputShape()} })`);
-        } else if (
-          layer.type == "global_average_pooling2d"
-        ) {
+        } else if (layer.type == "global_average_pooling2d") {
           compiledLayers.push(`tf.layers.globalAveragePooling2d()`);
         }
         if (layer.type === "lstm_layer") {

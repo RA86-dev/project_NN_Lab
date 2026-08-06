@@ -1,3 +1,5 @@
+import { leakyRelu } from "@tensorflow/tfjs";
+
 export const definitions = {
     main_program:`
     #### Main Program
@@ -155,5 +157,10 @@ export const definitions = {
     ### Arguments
     Units - the number of units in the RNN layer.
     Return Sequences - Controls whether an RNN outputs every timestep or just the final result.
-    `
+    `,
+    leakyRelu: `
+    #### Leaky ReLU
+    A activation function based on ReLU that solves a issue of dead neurons by letting a tiny, non-zero signal pass through when inputs are negative.
+    `,
+    
 }

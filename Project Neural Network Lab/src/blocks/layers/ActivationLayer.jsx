@@ -28,7 +28,6 @@ Blockly.Blocks["activation_layer"] = {
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
-
     this.setColour("#5ba58c");
     this.setTooltip("A fully connected neural network layer");
     this.setHelpUrl("");

@@ -1,5 +1,5 @@
 # Project Neural Network Lab
-A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages. 
+A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. 
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
 
@@ -51,7 +51,7 @@ npm run start
 ## License
 Licensed under ISC/MIT [here](LICENSE)
 ## AI Use Declaration
-In this project, AI was used for the user interface and debugging issues along with writing some functions to help.
+In this project, AI was used for the user interface and debugging issues along with writing some functions to help. However, it was not used to Write any documentation.
 ## Example Image
 <p align="center">
   <img src="README_assets/screenshot.png" alt="Screenshot" width="600"/>
@@ -79,13 +79,15 @@ Every "fancy" word is listed here, along with a simplified definition.
 - Layer Normalization - Instead of normalizing across a batch of data (Batch Normalization), it calculates the mean and variability across the features of a training example.
 - MNIST dataset - The MNIST dataset is a 70,000 images dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
 
+
 Here's a example model:
 
 ![Alt-Text](README_assets/SNN-default-model.png)
 This is how you configure a normal neural network model. In this case, we are using MNIST, not the math dataset (which can literally just use one neuron but thats for fast testing). In the SNN model, we define the name (which is used for inference as shown by the MNIST brick) and 3 dense layers after that. 
-#### Activation Definitions
+#### Basic Activation Definitions
 - Activation - An activation function is a mathematical rule used in ANNs to decide if a neuron should fire or pass information.
     - ReLU - A commonly used function for activations. Its easy and quick. 
     - Sigmoid - A mathematical formula that converts a number between 0 and 1, where 0 is equal to negative infinity and 1 is equal to infinity. Good for probabilities and predictions.
     - Softmax - A function that turns a list of unconstrained numbers into a valid set of probabilities. Good for problems where you want to generate a list of predictions.
     - Tanh - A non-linear activation function that maps input values to a curve ranging strictly between -1 and 1. Due to this, the mean of averages is around 0, which helps models converge faster than Sigmoid.
+These are the most commonly used activations. Some are better than others for certain tasks, some worse for certain tasks.
