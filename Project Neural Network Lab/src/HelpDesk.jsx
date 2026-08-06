@@ -24,7 +24,107 @@ function loadList() {
     return [];
   }
 }
-
+export function addDefaultItems() {
+  let current_list = loadList();
+  if (current_list.length === 0 || !current_list.includes(["MNIST Template Project"])) {
+    localStorage.setItem("MNIST Template Project", JSON.stringify(
+      {
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "main_program",
+        "id": "^e2r,mGA.GQPD67GzT-Z",
+        "x": -60,
+        "y": -12,
+        "inputs": {
+          "STACK": {
+            "block": {
+              "type": "train_model",
+              "id": "cPlvZ:H7/2GFmi56$bBc",
+              "fields": {
+                "EPOCHS": 10,
+                "OPTIMIZER": "adam"
+              },
+              "inputs": {
+                "MODEL": {
+                  "block": {
+                    "type": "sequential_neural_network",
+                    "id": "xkn@7,Mzu2@Sq_bisD`y",
+                    "fields": {
+                      "MODEL_NAME": "Model1"
+                    },
+                    "inputs": {
+                      "LAYERS": {
+                        "block": {
+                          "type": "conv2d_layer",
+                          "id": "R/,_!xPDXZYLd|%!Pn4E",
+                          "fields": {
+                            "FILTERS": 32,
+                            "KERNEL_SIZE": 3,
+                            "STRIDES": 1,
+                            "PADDING": "same",
+                            "ACTIVATION": "relu"
+                          },
+                          "next": {
+                            "block": {
+                              "type": "dense_layer",
+                              "id": "dBhFcSdsR?ck4iqf2Q.R",
+                              "fields": {
+                                "UNITS": 128,
+                                "ACTIVATION": "relu"
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "dense_layer",
+                                  "id": "%cX%,S/it8,BZJkw(_t6",
+                                  "fields": {
+                                    "UNITS": 128,
+                                    "ACTIVATION": "relu"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DATASET": {
+                  "block": {
+                    "type": "mnist_dataset",
+                    "id": "Q#]#EJs4@9o4_8zSoFQL",
+                    "fields": {
+                      "Classes": 10,
+                      "NORMALIZE": true,
+                      "Split": "TRAINING",
+                      "DATASET_SIZE": 1000
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "mnist_inference_model",
+                  "id": "O9e7`N0y3sxQj?iZw~_q",
+                  "fields": {
+                    "MODEL_ID": "Model1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+    ))
+    current_list.push({ localStorageName: "MNIST Template Project" });
+    localStorage.setItem("data_stored", JSON.stringify(current_list));
+  }
+}
 export function getCurrentCode(workspace) {
   if (!workspace) return null;
   return Blockly.serialization.workspaces.save(workspace);
@@ -61,6 +161,7 @@ function SavedFiles({ workspace, files }) {
 }
 
 export function HelpDesk({ workspace }) {
+  addDefaultItems();
   const [selectedDefinition, setSelectedDefinition] = useState("");
   const [fileName, setFileName] = useState("");
   const [files, setFiles] = useState(loadList);

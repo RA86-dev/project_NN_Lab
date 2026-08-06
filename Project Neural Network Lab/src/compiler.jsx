@@ -2,6 +2,21 @@
 import { getCurrentCode } from "./HelpDesk";
 import { prepareUploadedDataset } from "./blocks/dataset/upload_dataset";
 
+const sequenceLayerTypes = new Set(["gru_layer", "lstm_layer", "rnn_layer"]);
+const shapePreservingLayerTypes = new Set([
+  "layer_normalization",
+  "batch_normalization",
+  "dropout_layer",
+  "gaussian_noise",
+]);
+
+function modelUsesSequenceInput(layers) {
+  const shapeDefiningLayer = layers.find(
+    (layer) => !shapePreservingLayerTypes.has(layer.type),
+  );
+  return sequenceLayerTypes.has(shapeDefiningLayer?.type);
+}
+
 function fail(message, block) {
   const suffix = block?.type ? ` (block: ${block.type})` : "";
   throw new Error(message + suffix);
@@ -326,9 +341,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
     case "model": {
       const dataset = context.dataset;
       const layers = [...node.layers];
-      const sequenceInput =
-  layers[0]?.type === "gru_layer" ||
-  layers[0]?.type === "lstm_layer";
+      const sequenceInput = modelUsesSequenceInput(layers);
       const inputShape = sequenceInput
         ? dataset.inputShape.length === 1 ? [1, dataset.inputShape[0]] : dataset.inputShape.slice(0, 2)
         : dataset.inputShape;
@@ -342,59 +355,63 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
       }
 
       const compiledLayers = [];
+      const firstInputShape = () => compiledLayers.length === 0
+        ? `, inputShape: ${JSON.stringify(inputShape)}`
+        : "";
+      const firstInputShapeConfig = () => compiledLayers.length === 0
+        ? `{ inputShape: ${JSON.stringify(inputShape)} }`
+        : "{}";
       for (let index = 0; index < layers.length;) {
         const layer = layers[index];
         if (layer.type === "flatten") {
-          const first = index === 0;
+          const first = compiledLayers.length === 0;
           compiledLayers.push(`tf.layers.flatten(${first ? `{ inputShape: ${JSON.stringify(dataset.inputShape)} }` : ""})`);
           index += 1;
           continue;
         }
         if (layer.type === "layer_normalization") {
-          compiledLayers.push(`tf.layers.layerNormalization()`);
+          compiledLayers.push(`tf.layers.layerNormalization(${firstInputShapeConfig()})`);
         } else if (layer.type === "rnn_layer") {
           compiledLayers.push(`tf.layers.rnn({
             units: ${layer.units},
-            returnSequences: ${layer.returnSequences}
+            returnSequences: ${layer.returnSequences}${firstInputShape()}
           })`);
         } else if (layer.type === "batch_normalization") {
-          compiledLayers.push(`tf.layers.batchNormalization()`);
-        } else if (layer.type === "activation_layer") {
-          compiledLayers.push(`tf.layers.activation({ activation: ${JSON.stringify(layer.activation)}, inputShape: ${JSON.stringify(inputShape)} })`);
+          compiledLayers.push(`tf.layers.batchNormalization(${firstInputShapeConfig()})`);
+        } else if (layer.type === "activation") {
+          compiledLayers.push(`tf.layers.activation({ activation: ${JSON.stringify(layer.activation)}${firstInputShape()} })`);
         } else if (layer.type === "conv2d") {
           compiledLayers.push(`tf.layers.conv2d({
             filters: ${layer.filters},
             kernelSize: ${layer.kernelSize},
             strides: ${layer.strides},
             padding: ${JSON.stringify(layer.padding)},
-            activation: ${JSON.stringify(layer.activation)},
-            inputShape: ${JSON.stringify(inputShape)}
+            activation: ${JSON.stringify(layer.activation)}${firstInputShape()}
           })`);
 
         } else if (layer.type === "max_pooling2d") {
           compiledLayers.push(`tf.layers.maxPooling2d({
             poolSize: ${layer.poolSize},
-            strides: ${layer.strides},
-            inputShape: ${JSON.stringify(inputShape)}
+            strides: ${layer.strides}${firstInputShape()}
           })`);
         } else if (layer.type === "dropout_layer") {
-          compiledLayers.push(`tf.layers.dropout({ rate: ${layer.dropoutRate} })`);
+          compiledLayers.push(`tf.layers.dropout({ rate: ${layer.dropoutRate}${firstInputShape()} })`);
         } else if (layer.type === "embedding_layer") {
           compiledLayers.push(`tf.layers.embedding({
             inputDim: ${layer.dimensions},
             outputDim: ${layer.outputDim},
-            inputLength: ${layer.inputLength}
+            inputLength: ${layer.inputLength}${firstInputShape()}
           })`);
         } else if (layer.type === "multihead_attention") {
           compiledLayers.push(`tf.layers.multiHeadAttention({
             num_heads: ${layer.heads},
-            key_dim: ${layer.keyDimensions}
+            key_dim: ${layer.keyDimensions}${firstInputShape()}
           })`);
         } // uhm
         else if (
-          layer.type == "GaussianNoise"
+          layer.type == "gaussian_noise"
         ) {
-          compiledLayers.push(`tf.layers.gaussianNoise({ stddev: ${layer.stddev} })`);
+          compiledLayers.push(`tf.layers.gaussianNoise({ stddev: ${layer.stddev}${firstInputShape()} })`);
         }
         if (layer.type === "lstm_layer") {
             let end = index + 1;
@@ -418,7 +435,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
               compiledLayers.push(`tf.layers.rnn({
                 cell: [${cells}],
                 returnSequences: ${group.at(-1).return_sequences ?? false}
-                ${index === 0
+                ${compiledLayers.length === 0
                   ? `, inputShape: ${JSON.stringify(inputShape)}`
                   : ""}
               })`);
@@ -427,7 +444,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
                 units: ${layer.units},
                 returnSequences: ${layer.return_sequences ?? false},
                 activation: ${JSON.stringify(layer.activation)}
-                ${index === 0
+                ${compiledLayers.length === 0
                   ? `, inputShape: ${JSON.stringify(inputShape)}`
                   : ""}
               })`);
@@ -438,8 +455,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
           }
 
         if (layer.type === "dense") {
-          const first = index === 0 && layers[0].type !== "flatten";
-          compiledLayers.push(`tf.layers.dense({ units: ${layer.units}, activation: ${JSON.stringify(layer.activation)}${first ? `, inputShape: ${JSON.stringify(dataset.inputShape)}` : ""} })`);
+          compiledLayers.push(`tf.layers.dense({ units: ${layer.units}, activation: ${JSON.stringify(layer.activation)}${firstInputShape()} })`);
           index += 1;
           continue;
         }
@@ -449,9 +465,9 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
           const group = layers.slice(index, end);
           if (group.length > 1) {
             const cells = group.map((item) => `tf.layers.gruCell({ units: ${item.units} })`).join(",");
-            compiledLayers.push(`tf.layers.rnn({ cell: [${cells}], returnSequences: ${group.at(-1).return_sequences ?? false}${index === 0 ? `, inputShape: ${JSON.stringify(inputShape)}` : ""} })`);
+            compiledLayers.push(`tf.layers.rnn({ cell: [${cells}], returnSequences: ${group.at(-1).return_sequences ?? false}${firstInputShape()} })`);
           } else {
-            compiledLayers.push(compileCode(layer, { inputShape: index === 0 ? inputShape : null }));
+            compiledLayers.push(compileCode(layer, { inputShape: compiledLayers.length === 0 ? inputShape : null }));
           }
           index = end;
           continue;
@@ -460,12 +476,9 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
       }
       return `tf.sequential({ layers: [${compiledLayers.join(",")}] })`;
     }
-
     case "train": {
       const dataset = node.dataset;
-      const sequenceInput =
-    node.model.layers[0]?.type === "gru_layer" ||
-    node.model.layers[0]?.type === "lstm_layer";
+      const sequenceInput = modelUsesSequenceInput(node.model.layers);
       const classification = dataset.task === "classification";
       const loss = classification ? "categoricalCrossentropy" : "meanSquaredError";
       const metrics = classification ? `, metrics: ["accuracy"]` : "";
