@@ -2,6 +2,7 @@ import "./blocks/layers/DenseLayer"
 import "./blocks/neural_networks/sequential"
 import "./blocks/main_program"
 import "./blocks/dataset/math_dataset"
+import "./blocks/dataset/math_expressions"
 import "./blocks/dataset/mnist_dataset"
 import "./blocks/dataset/upload_dataset"
 import "./blocks/layers/GRUModel"
@@ -16,6 +17,8 @@ import "./blocks/layers/MaxPooling2D"
 import "./blocks/layers/LSTM"
 import "./blocks/layers/embedding"
 import "./blocks/layers/multihead_attention"
+import "./blocks/layers/GaussianNoise"
+import "./blocks/layers/RecurrentNeuralNetwork"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -79,6 +82,14 @@ contents: [
         },
         {
             kind: "block",
+            type: "gaussian_noise"
+        },
+        {
+            kind: "block",
+            type: "rnn_layer"
+        },
+        {
+            kind: "block",
             type: "max_pooling2d_layer"
         },
         {
@@ -126,7 +137,12 @@ contents: [
     contents: [
         {
             kind: "block",
-            type: 'math_dataset'
+            type: 'math_dataset',
+            inputs: {
+                EQUATION: {
+                    shadow: { type: "math_x_value" }
+                }
+            }
         },
         {
             kind: "block",
@@ -135,6 +151,36 @@ contents: [
         {
             kind: "block",
             type: "upload_dataset"
+        }
+    ]
+},
+{
+    kind: "category",
+    name: "Math Expressions",
+    colour: "#4f86a8",
+    contents: [
+        {
+            kind: "block",
+            type: "math_x_value"
+        },
+        {
+            kind: "block",
+            type: "math_number_value"
+        },
+        {
+            kind: "block",
+            type: "math_arithmetic_value",
+            inputs: {
+                LEFT: { shadow: { type: "math_number_value" } },
+                RIGHT: { shadow: { type: "math_number_value" } }
+            }
+        },
+        {
+            kind: "block",
+            type: "math_function_value",
+            inputs: {
+                VALUE: { shadow: { type: "math_number_value" } }
+            }
         }
     ]
 },

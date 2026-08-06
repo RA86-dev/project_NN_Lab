@@ -35,6 +35,76 @@ function textField(block, name) {
   return String(block.fields[name] ?? "");
 }
 
+function compileMathExpression(block) {
+  if (!block) return { type: "math_variable" };
+
+  switch (block.type) {
+    case "math_number_value":
+      return { type: "math_number", value: numberField(block, "VALUE") };
+    case "math_x_value":
+      return { type: "math_variable" };
+    case "math_arithmetic_value":
+      return {
+        type: "math_arithmetic",
+        operation: textField(block, "OPERATION"),
+        left: compileMathExpression(inputBlock(block, "LEFT")),
+        right: compileMathExpression(inputBlock(block, "RIGHT")),
+      };
+    case "math_function_value":
+      return {
+        type: "math_function",
+        functionName: textField(block, "FUNCTION"),
+        value: compileMathExpression(inputBlock(block, "VALUE")),
+      };
+    case "rnn_layer":
+      return {
+        type: "rnn",
+        units: numberField(block, "UNITS"),
+        returnSequences: block.fields.RETURN_SEQUENCES === true || block.fields.RETURN_SEQUENCES === "TRUE",
+      };
+    default:
+      fail("Unknown math expression " + block.type, block);
+  }
+}
+
+function compileMathExpressionCode(node) {
+  if (node.type === "math_number") return JSON.stringify(node.value);
+  if (node.type === "math_variable") return "xs";
+
+  if (node.type === "math_arithmetic") {
+    const operations = {
+      ADD: "add",
+      SUBTRACT: "sub",
+      MULTIPLY: "mul",
+      DIVIDE: "div",
+      POWER: "pow",
+    };
+    const operation = operations[node.operation];
+    if (!operation) fail("Unknown math operation " + node.operation);
+    return `tf.${operation}(${compileMathExpressionCode(node.left)}, ${compileMathExpressionCode(node.right)})`;
+  }
+
+  if (node.type === "math_function") {
+    const functions = {
+      ABS: "abs",
+      EXP: "exp",
+      LOG: "log",
+      SQRT: "sqrt",
+      SQUARE: "square",
+      SIN: "sin",
+      COS: "cos",
+      TAN: "tan",
+      TANH: "tanh",
+      SIGMOID: "sigmoid",
+    };
+    const functionName = functions[node.functionName];
+    if (!functionName) fail("Unknown math function " + node.functionName);
+    return `tf.${functionName}(${compileMathExpressionCode(node.value)})`;
+  }
+
+  fail("Unknown compiled math expression " + node.type);
+}
+
 export function compileBlock(block) {
   switch (block.type) {
     case "main_program":
@@ -77,7 +147,7 @@ export function compileBlock(block) {
         task: "regression",
         inputShape: [1],
         outputShape: [1],
-        equation: textField(block, "EQUATION"),
+        equation: compileMathExpression(inputBlock(block, "EQUATION", false)),
         min: numberField(block, "MIN_X"),
         max: numberField(block, "MAX_X"),
         points: numberField(block, "POINTS"),
@@ -137,6 +207,11 @@ export function compileBlock(block) {
         dimensions: numberField(block, "Dimensions"),
         outputDim: numberField(block, "Output_Dim"),
         inputLength: numberField(block, "Input Length")
+      };
+    case "gaussian_noise":
+      return {
+        type: "gaussian_noise",
+        stddev: numberField(block, "STDDEV")
       };
     case "upload_dataset":
       return {
@@ -204,24 +279,20 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
       }
 
       if (node.name === "math") {
-        const expression = node.equation.replace(/^\s*y\s*=\s*/i, "");
+        const expression = compileMathExpressionCode(node.equation);
         return `function generateData() {
   console.log("Generating math dataset...");
-  const xs = [];
-  const ys = [];
   const min = ${node.min};
   const max = ${node.max};
   const points = ${node.points};
-  const step = (max - min) / Math.max(points - 1, 1);
-  const equation = Function("x", "return (" + ${JSON.stringify(expression)} + ")");
-  for (let i = 0; i < points; i += 1) {
-    const x = min + i * step;
-    xs.push(x);
-    ys.push(equation(x));
-  }
+  const xs = tf.linspace(min, max, points).reshape([points, 1]);
+  const result = ${expression};
+  const ys = result instanceof tf.Tensor
+    ? tf.broadcastTo(result, [points, 1])
+    : tf.fill([points, 1], result);
   return {
-    xs: ${context.sequenceInput ? "tf.tensor3d(xs, [xs.length, 1, 1])" : "tf.tensor2d(xs, [xs.length, 1])"},
-    ys: tf.tensor2d(ys, [ys.length, 1])
+    xs: ${context.sequenceInput ? "xs.reshape([points, 1, 1])" : "xs"},
+    ys
   };
 }`;
       }
@@ -281,6 +352,11 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         }
         if (layer.type === "layer_normalization") {
           compiledLayers.push(`tf.layers.layerNormalization()`);
+        } else if (layer.type === "rnn_layer") {
+          compiledLayers.push(`tf.layers.rnn({
+            units: ${layer.units},
+            returnSequences: ${layer.returnSequences}
+          })`);
         } else if (layer.type === "batch_normalization") {
           compiledLayers.push(`tf.layers.batchNormalization()`);
         } else if (layer.type === "activation_layer") {
@@ -314,6 +390,11 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             num_heads: ${layer.heads},
             key_dim: ${layer.keyDimensions}
           })`);
+        } // uhm
+        else if (
+          layer.type == "GaussianNoise"
+        ) {
+          compiledLayers.push(`tf.layers.gaussianNoise({ stddev: ${layer.stddev} })`);
         }
         if (layer.type === "lstm_layer") {
             let end = index + 1;

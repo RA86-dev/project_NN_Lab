@@ -18,11 +18,27 @@ export const definitions = {
     `,
     math_dataset: `
     #### Math Dataset
-    Generates a dataset of all potential points for the model to predict from a single equation
+    Generates x/y training points from connected math expression blocks. The expression is calculated with TensorFlow in the browser.
     ##### Arguments:
-    - Equation - The equation that it will use to generate a certain amount of points for the model to calculate.
+    - y - Connect an expression made from x, number, arithmetic, and function blocks.
     - Minimum and Maximum X - the maximum and minimum that X can be (useful for certain math equations that go on forever)
     - Points - the total amount of dataset points it will generate.
+    `,
+    math_number_value: `
+    #### Number
+    A numeric constant for a math dataset expression.
+    `,
+    math_x_value: `
+    #### X Value
+    The input x value for a math dataset expression.
+    `,
+    math_arithmetic_value: `
+    #### Arithmetic
+    Combines two expressions using TensorFlow addition, subtraction, multiplication, division, or powers.
+    `,
+    math_function_value: `
+    #### Math Function
+    Applies a TensorFlow function such as absolute value, exponential, logarithm, square root, or trigonometry.
     `,
     dense_layer: `
     #### Dense Layer
@@ -132,5 +148,12 @@ export const definitions = {
     ### Arguments
     Axis - the axis along which to normalize.
     Epsilon - a small constant for numerical stability.
+    `,
+    rnn_layer: `
+    #### RNN Layer
+    A recurrent neural network layer that processes sequences of inputs.
+    ### Arguments
+    Units - the number of units in the RNN layer.
+    Return Sequences - Controls whether an RNN outputs every timestep or just the final result.
     `
 }

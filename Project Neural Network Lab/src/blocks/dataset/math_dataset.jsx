@@ -2,16 +2,12 @@ import * as Blockly from "blockly";
 
 Blockly.Blocks["math_dataset"] = {
   init: function () {
-
     this.appendDummyInput()
         .appendField("Math Dataset");
 
-    this.appendDummyInput()
-        .appendField("Equation:")
-        .appendField(
-            new Blockly.FieldTextInput("y = 2*x - 1"),
-            "EQUATION"
-        );
+    this.appendValueInput("EQUATION")
+        .setCheck("MATH_EXPRESSION")
+        .appendField("y =");
 
     this.appendDummyInput()
         .appendField("Minimum X:")
@@ -30,13 +26,13 @@ Blockly.Blocks["math_dataset"] = {
     this.appendDummyInput()
         .appendField("Points:")
         .appendField(
-            new Blockly.FieldNumber(100),
+            new Blockly.FieldNumber(100, 2),
             "POINTS"
         );
 
     this.setOutput(true, "DATASET");
 
     this.setColour("#5ba58c");
-    this.setTooltip("Generates a dataset from a mathematical equation");
+    this.setTooltip("Generates a dataset from connected math expression blocks");
   }
 };

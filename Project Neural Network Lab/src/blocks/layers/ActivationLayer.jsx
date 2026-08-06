@@ -15,7 +15,10 @@ Blockly.Blocks["activation_layer"] = {
                 ["Sigmoid", "sigmoid"],
                 ["Softmax", "softmax"],
                 ["Tanh", "tanh"],
-                ["None", "linear"]
+                ["None", "linear"],
+                ["elu","elu"],
+                ["Leaky ReLU", "leakyReLU"],
+                ["Thresholded ReLU", "thresholdedReLU"]
             ]),
             "ACTIVATION"
         );
