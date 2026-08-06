@@ -30,7 +30,16 @@ Blockly.Blocks["train_model"] = {
             "OPTIMIZER"
         );
 
-
+    this.appendDummyInput()
+        .appendField("Loss Function:")
+        .appendField(
+            new Blockly.FieldDropdown([
+                ["Categorical Crossentropy", "categoricalCrossentropy"],
+                ["Mean Squared Error", "meanSquaredError"]
+            ]),
+            "LOSS_FUNCTION"
+        );
+        
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 

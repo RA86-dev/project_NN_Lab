@@ -8,6 +8,7 @@ A blockly based (*Scratch-style engine*) that allows you to run neural network m
 Currently, the following has been added:
 - Blockly Engine
 - Sequential Neural Network 
+- A Chart for neural network weight values + Built in presets
 - Multiple Layers:
     - GRU
     - Dense Layers

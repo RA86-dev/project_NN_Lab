@@ -131,6 +131,8 @@ export function compileBlock(block) {
         epochs: numberField(block, "EPOCHS"),
         model: compileBlock(inputBlock(block, "MODEL")),
         dataset: compileBlock(inputBlock(block, "DATASET")),
+        learning_rate: numberField(block, "LEARNING_RATE"),
+        loss_function: textField(block, "LOSS_FUNCTION")
       };
     case "validate_model":
       return {
@@ -478,9 +480,10 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
     }
     case "train": {
       const dataset = node.dataset;
+      const loss_function = node.loss_function;
       const sequenceInput = modelUsesSequenceInput(node.model.layers);
       const classification = dataset.task === "classification";
-      const loss = classification ? "categoricalCrossentropy" : "meanSquaredError";
+      const loss = loss_function;
       const metrics = classification ? `, metrics: ["accuracy"]` : "";
       return `{
 ${compileCode(dataset, { sequenceInput })}
