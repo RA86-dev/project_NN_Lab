@@ -19,6 +19,7 @@ import "./blocks/layers/embedding"
 import "./blocks/layers/multihead_attention"
 import "./blocks/layers/GaussianNoise"
 import "./blocks/layers/RecurrentNeuralNetwork"
+import "./blocks/layers/DropoutLayer"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -83,6 +84,10 @@ contents: [
         {
             kind: "block",
             type: "gaussian_noise"
+        },
+        {
+            kind: "block",
+            type: "dropout_layer"
         },
         {
             kind: "block",
