@@ -653,6 +653,7 @@ function LowerElements({ workspace }) {
     </>
   );
 }async function setupTensorFlow() {
+  console.log(tf.getBackend())
   if ('gpu' in navigator) {
     try {
       await tf.setBackend('webgpu');
