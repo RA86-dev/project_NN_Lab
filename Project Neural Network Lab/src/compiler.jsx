@@ -416,7 +416,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         } else if (layer.type == "reshape_layer") {
           compiledLayers.push(`tf.layers.reshape({ shape: ${JSON.stringify(layer.shape)}${firstInputShape()} })`);
         } else if (layer.type == "global_average_pooling2d") {
-          compiledLayers.push(`tf.layers.globalAveragePooling2d()`);
+          compiledLayers.push(`tf.layers.globalAveragePooling2d(${firstInputShapeConfig()})`);
         }
         if (layer.type === "lstm_layer") {
             let end = index + 1;
