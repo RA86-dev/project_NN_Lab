@@ -1,4 +1,11 @@
 # Project Neural Network Lab
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+![Maintainer](https://img.shields.io/badge/maintainer-RA86--dev-blue)
+[![Website monip.org](https://img.shields.io/website-up-down-green-red/http/ra86-dev.github.io/project_NN_Lab)](Server_Status)
+
+
+---
 A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. 
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
@@ -65,7 +72,7 @@ and a little bit of concepts. The goal of this project is to simplify AI models 
 Every "fancy" word is listed here, along with a simplified definition.
 - Model - the neural network.
 - Activation Layer - A mathematical formula inside of a neural network. It decides whether the node should fire, or to pass the signal. It basically just adds nonlinearity.
-- Conv2d - Conv2d is a neural network architecture style, that basically identifies patterns in a 2d shape (thats where the "2d" in the name comes from). Its goal is to basically spot potential patterns, so its used for neural networks to be able to identify patterns.
+- Conv2d - Conv2d is a neural network architecture style, that basically identifies patterns in a 2d shape (thats where the "2d" in the name comes from). Its goal is to basically spot potential patterns, so its used for neural networks to be able to identify patterns. Conv meaning Convolution, Convolution uses a sliding layer to identify patterns.
 - Dense Layer - A dense layer is basically a layer where everything is connected. In some other architectures, such as MoE (Mixture of Experts), not all parameters are connected to make it more efficient. This is the most common block used in AI and Machine Learning.
 - Dropout Layer - This layer effectively turns off a certain percentage of connections. This is used for testing models or to train models to be more compressed. DURING TRAINING. In actual inference, it does not do this.
 - GRU - GRU means Gated Recurrent Unit. It is a simpler version of a LSTM, and has "gates" to control things like how much past information to keep for the future, how much to forget, and a hidden state to merge the short term and long term memory into one. For LSTM and GRUs, you need to turn on return sequences for if there are more layers underneath it.
