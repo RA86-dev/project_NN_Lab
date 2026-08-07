@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
     "@tensorflow/tfjs-data": "^4.22.0",
     "blockly": "^13.2.1",
     "chart.js": "^4.5.1",

@@ -19,6 +19,7 @@ Currently, the following has been added:
 - Blockly Engine
 - Sequential Neural Network 
 - A Chart for neural network weight values + Built in presets
+- WebGPU/WebGL support! 
 - Multiple Layers:
     - GRU
     - Dense Layers

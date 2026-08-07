@@ -187,7 +187,7 @@ export function compileBlock(block) {
     case "layer_normalization": return { type: "layer_normalization" };
     case "batch_normalization": return { type: "batch_normalization" };
     case "GlobalAveragePooling2D": return { type: "global_average_pooling2d" };
-    case "reshape_layer": return { type: "reshape", shape: textField(block, "SHAPE") };
+    case "reshape_layer": return { type: "reshape", shape: textField(block, "NEW_LAYER_FORMAT").split(',') };
     case "alpha_dropout_layer": return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
     case "conv2d_layer":
       return {

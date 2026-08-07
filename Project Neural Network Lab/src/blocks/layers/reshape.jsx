@@ -8,7 +8,8 @@ Blockly.Blocks["reshape_layer"] = {
         .appendField("Reshape Layer");
     this.appendDummyInput()
         .appendField(
-            new Blockly.FieldTextInput("28,28,1")
+            new Blockly.FieldTextInput("28,28,1"),
+            "NEW_LAYER_FORMAT"
         )
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

@@ -23,6 +23,7 @@ import "./blocks/layers/DropoutLayer"
 import "./blocks/layers/AlphaDropout"
 import "./blocks/layers/leakyReLU"
 import "./blocks/layers/GlobalAveragePooling"
+import "./blocks/layers/reshape"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -123,6 +124,10 @@ contents: [
         {
             kind: "block",
             type: "embedding_layer"
+        },
+        {
+            kind: "block",
+            type: "reshape_layer"
         }
     ]
 },

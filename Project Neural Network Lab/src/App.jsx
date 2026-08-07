@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import * as Blockly from "blockly";
 import * as tf from "@tensorflow/tfjs";
 import Chart from "chart.js/auto";
-
+import '@tensorflow/tfjs-backend-webgpu'
+import '@tensorflow/tfjs-backend-webgl'
 import "./App.css";
 import { HelpDesk } from "./HelpDesk";
 
@@ -651,45 +652,86 @@ function LowerElements({ workspace }) {
       </div>
     </>
   );
+}async function setupTensorFlow() {
+  if ('gpu' in navigator) {
+    try {
+      await tf.setBackend('webgpu');
+      await tf.ready();
+      console.log('Successfully running on WebGPU:', tf.getBackend());
+      return;
+    } catch (e) {
+      console.warn('WebGPU failed to initialize, falling back to WebGL...', e);
+    }
+  } else {
+    console.warn('WebGPU is not supported on this browser.');
+    alert(
+      'WebGPU is not set up in this browser! This might result in:\n 1. Slower Performance\n 2. More CPU usage than normal.'
+    );
+  }
+
+  await tf.setBackend('webgl');
+  await tf.ready();
+  console.log('Running on fallback backend:', tf.getBackend());
 }
 
 function App() {
   const [workspace, setWorkspace] = useState(null);
+  const [isTfReady, setIsTfReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    setupTensorFlow().then(() => {
+      if (isMounted) {
+        setIsTfReady(true);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!isTfReady) {
+    return (
+      <div className="appShell">
+        <div className="loadingSpinner">Initializing TensorFlow...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="appShell">
+      <header className="appHeader">
+        <div className="brandCopy">
+          <strong>Neural Network Lab</strong>
+          <span>An easy-to-use visual model builder for simple neural networks.</span>
+        </div>
 
-        <header className="appHeader">
-
-          <div className="brandCopy">
-            <strong>Neural Network Lab</strong>
-            <span>A easy-to-use visual model builder for simple neural networks.</span>
-          </div>
-
-          <div className="headerMeta">
-            <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
-          <div className="headerMeta">
-            <a href="/project_NN_Lab/">Playground</a>
-          </div>
-          <div className="headerMeta">
-            <a href="/project_NN_Lab/fileManager.html">File Manager</a>
-          </div>
-          
-        </header>
-
-
-
-
+        <div className="headerMeta">
+          <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+        </div>
+        <div className="headerMeta">
+          <a href="/project_NN_Lab/">Playground</a>
+        </div>
+        <div className="headerMeta">
+          <a href="/project_NN_Lab/fileManager.html">File Manager</a>
+        </div>
+      </header>
 
       <main>
         <section className="workspacePanel">
           <div className="workspaceHeading">
             <div>
-
               <h1>Build a Neural Network</h1>
             </div>
-            <p>Drag blocks from the library and connect them into a training pipeline. First, always start with the Main Program input block. Connect all other blocks using that. For inference using a model, please set a decent name for it.</p>
+            <p>
+              Drag blocks from the library and connect them into a training pipeline. First, always
+              start with the Main Program input block. Connect all other blocks using that. For
+              inference using a model, please set a decent name for it.
+            </p>
           </div>
           <div className="canvasFrame">
             <BlocklyEditor setWorkspace={setWorkspace} />
