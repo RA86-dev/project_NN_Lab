@@ -24,6 +24,7 @@ import "./blocks/layers/AlphaDropout"
 import "./blocks/layers/leakyReLU"
 import "./blocks/layers/GlobalAveragePooling"
 import "./blocks/layers/reshape"
+import "./blocks/layers/Flatten"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -72,6 +73,10 @@ contents: [
         {
             kind: "block",
             type: "dense_layer"
+        },
+        {
+            kind: "block",
+            type: "flatten_layer"
         },
         {
             kind: "block",

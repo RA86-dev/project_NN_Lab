@@ -144,6 +144,8 @@ export function compileBlock(block) {
       return { type: "infer", mode: "math", modelId: textField(block, "MODEL_ID"), input: numberField(block, "X_VALUE") };
     case "mnist_inference_model":
       return { type: "infer", mode: "mnist", modelId: textField(block, "MODEL_ID") };
+    case "flatten_layer":
+      return { type: "flatten"}
     case "mnist_dataset":
       return {
         type: "dataset",
@@ -350,7 +352,16 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         layers.push({ type: "dense", units: dataset.outputShape[0], activation: dataset.task === "regression" ? "linear" : "softmax" });
       }
       const firstDenseIndex = layers.findIndex(layer => layer.type === "dense");
-      if (dataset.inputShape.length === 3 && !sequenceInput && firstDenseIndex !== -1) {
+      const layersBeforeFirstDense = layers.slice(0, firstDenseIndex);
+      const alreadyVectorized = layersBeforeFirstDense.some(
+        layer => layer.type === "flatten" || layer.type === "global_average_pooling2d",
+      );
+      if (
+        dataset.inputShape.length === 3 &&
+        !sequenceInput &&
+        firstDenseIndex !== -1 &&
+        !alreadyVectorized
+      ) {
         layers.splice(firstDenseIndex, 0, { type: "flatten" });
       }
 

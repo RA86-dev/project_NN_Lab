@@ -2,7 +2,7 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 ![Maintainer](https://img.shields.io/badge/maintainer-RA86--dev-blue)
-[![Website monip.org](https://img.shields.io/website-up-down-green-red/http/ra86-dev.github.io/project_NN_Lab)](Server_Status)
+[![Website Ra86-dev.github.io/project_NN_Lab](https://img.shields.io/website-up-down-green-red/http/ra86-dev.github.io/project_NN_Lab)](Server_Status)
 ![GitHub License](https://img.shields.io/github/license/RA86-dev/project_NN_Lab)
 ![GitHub last commit](https://img.shields.io/github/last-commit/RA86-dev/project_NN_lab)
 
@@ -74,9 +74,8 @@ In this project, AI was used for the user interface and debugging issues along w
 </p>
 
 ## Getting Started Guide (How to Use)
-Hello! This is a guide on how to use my project. All you really need to know is:
-- What is a neural network?
-and a little bit of concepts. The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system.
+Hello! This is a guide on how to use my project.
+The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system.
 ### Vocabulary
 Every "fancy" word is listed here, along with a simplified definition.
 - Model - the neural network.

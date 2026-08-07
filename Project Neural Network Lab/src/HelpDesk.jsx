@@ -24,38 +24,30 @@ export function loadList() {
     return [];
   }
 }
-export function addDefaultItems() {
-  const currentList = loadList();
-  const hiddenDefaults = JSON.parse(localStorage.getItem("deleted_default_items") ?? "[]");
-  const uniqueList = currentList.filter((file, index, files) =>
-    file?.localStorageName &&
-    files.findIndex((candidate) => candidate?.localStorageName === file.localStorageName) === index
-  );
-  if (!hiddenDefaults.includes("MNIST Template Project") && !uniqueList.some((file) => file.localStorageName === "MNIST Template Project")) {
-    localStorage.setItem("MNIST Template Project", JSON.stringify(
-      {
+const MNIST_1 = {
   "blocks": {
     "languageVersion": 0,
     "blocks": [
       {
         "type": "main_program",
-        "id": "^e2r,mGA.GQPD67GzT-Z",
-        "x": -60,
-        "y": -12,
+        "id": "qagL)GfXE6?Fv,tl7PoL",
+        "x": 60,
+        "y": 60,
         "inputs": {
           "STACK": {
             "block": {
               "type": "train_model",
-              "id": "cPlvZ:H7/2GFmi56$bBc",
+              "id": "38b8TjJ4w.!bF*J$!|6r",
               "fields": {
-                "EPOCHS": 10,
-                "OPTIMIZER": "adam"
+                "EPOCHS": 15,
+                "OPTIMIZER": "adam",
+                "LOSS_FUNCTION": "categoricalCrossentropy"
               },
               "inputs": {
                 "MODEL": {
                   "block": {
                     "type": "sequential_neural_network",
-                    "id": "xkn@7,Mzu2@Sq_bisD`y",
+                    "id": "MVZ{qWoW{HU_:)ME^viH",
                     "fields": {
                       "MODEL_NAME": "Model1"
                     },
@@ -63,7 +55,7 @@ export function addDefaultItems() {
                       "LAYERS": {
                         "block": {
                           "type": "conv2d_layer",
-                          "id": "R/,_!xPDXZYLd|%!Pn4E",
+                          "id": "CmceI|~%K0Jmkxc@{33t",
                           "fields": {
                             "FILTERS": 32,
                             "KERNEL_SIZE": 3,
@@ -73,19 +65,45 @@ export function addDefaultItems() {
                           },
                           "next": {
                             "block": {
-                              "type": "dense_layer",
-                              "id": "dBhFcSdsR?ck4iqf2Q.R",
+                              "type": "max_pooling2d_layer",
+                              "id": "Ir}`)/99Nbbqx}{Hnx$8",
                               "fields": {
-                                "UNITS": 128,
-                                "ACTIVATION": "relu"
+                                "POOL_SIZE": 2,
+                                "STRIDES": 2
                               },
                               "next": {
                                 "block": {
-                                  "type": "dense_layer",
-                                  "id": "%cX%,S/it8,BZJkw(_t6",
-                                  "fields": {
-                                    "UNITS": 128,
-                                    "ACTIVATION": "relu"
+                                  "type": "flatten_layer",
+                                  "id": "L_/EBDu[Rx$7:4#3IH|#",
+                                  "next": {
+                                    "block": {
+                                      "type": "dense_layer",
+                                      "id": "k;$L=D4!}=1?`0:b@=zT",
+                                      "fields": {
+                                        "UNITS": 128,
+                                        "ACTIVATION": "elu"
+                                      },
+                                      "next": {
+                                        "block": {
+                                          "type": "dense_layer",
+                                          "id": "@Hu:FapsE^CKs3=aEZ19",
+                                          "fields": {
+                                            "UNITS": 128,
+                                            "ACTIVATION": "elu"
+                                          },
+                                          "next": {
+                                            "block": {
+                                              "type": "dense_layer",
+                                              "id": "{S;fQNk8OM6mWQ!U:`][",
+                                              "fields": {
+                                                "UNITS": 10,
+                                                "ACTIVATION": "softmax"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
                                   }
                                 }
                               }
@@ -99,12 +117,12 @@ export function addDefaultItems() {
                 "DATASET": {
                   "block": {
                     "type": "mnist_dataset",
-                    "id": "Q#]#EJs4@9o4_8zSoFQL",
+                    "id": "O;Re}UMhos!Ol@w^68#w",
                     "fields": {
                       "Classes": 10,
                       "NORMALIZE": true,
                       "Split": "TRAINING",
-                      "DATASET_SIZE": 1000
+                      "DATASET_SIZE": 3000
                     }
                   }
                 }
@@ -112,7 +130,7 @@ export function addDefaultItems() {
               "next": {
                 "block": {
                   "type": "mnist_inference_model",
-                  "id": "O9e7`N0y3sxQj?iZw~_q",
+                  "id": "?q(8THFqrot}#?%jQ^kw",
                   "fields": {
                     "MODEL_ID": "Model1"
                   }
@@ -124,8 +142,17 @@ export function addDefaultItems() {
       }
     ]
   }
-}
-    ))
+};
+
+export function addDefaultItems() {
+  const currentList = loadList();
+  const hiddenDefaults = JSON.parse(localStorage.getItem("deleted_default_items") ?? "[]");
+  const uniqueList = currentList.filter((file, index, files) =>
+    file?.localStorageName &&
+    files.findIndex((candidate) => candidate?.localStorageName === file.localStorageName) === index
+  );
+  if (!hiddenDefaults.includes("MNIST Template Project") && !uniqueList.some((file) => file.localStorageName === "MNIST Template Project")) {
+    localStorage.setItem("MNIST Template Project", JSON.stringify(MNIST_1))
     uniqueList.push({ localStorageName: "MNIST Template Project" });
   }
   localStorage.setItem("data_stored", JSON.stringify(uniqueList));
