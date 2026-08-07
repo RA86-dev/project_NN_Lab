@@ -670,10 +670,10 @@ function App() {
             <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">GitHub</a>
           </div>
           <div className="headerMeta">
-            <a href="/">Playground</a>
+            <a href="/project_NN_Lab/">Playground</a>
           </div>
           <div className="headerMeta">
-            <a href="/fileManager.html">File Manager</a>
+            <a href="/project_NN_Lab/fileManager.html">File Manager</a>
           </div>
           
         </header>
