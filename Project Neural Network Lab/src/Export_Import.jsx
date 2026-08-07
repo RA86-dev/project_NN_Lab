@@ -6,17 +6,12 @@ const DEFAULT_FILE_NAME = "neural_network_model.json";
 
 function parseWorkspaceJSON(code) {
   const data = typeof code === "string" ? JSON.parse(code) : code;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new TypeError("The selected file does not contain a Blockly workspace.");
-  }
-
+  if (!data || typeof data !== "object" || Array.isArray(data)) {throw new TypeError("The selected file does not contain a Blockly workspace.");}
   return data;
 }
 
 export function saveCurrentCodeAsJSON(workspace, fileName = DEFAULT_FILE_NAME) {
   if (!workspace) return null;
-
   const data = Blockly.serialization.workspaces.save(workspace);
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",

@@ -8,8 +8,7 @@ const shapePreservingLayerTypes = new Set([
   "batch_normalization",
   "dropout_layer",
   "gaussian_noise",
-]); // TODO: Check for anymore "shape preserving and seq layer type"
-
+]);
 function modelUsesSequenceInput(layers) {
   const shapeDefiningLayer = layers.find(
     (layer) => !shapePreservingLayerTypes.has(layer.type),
@@ -128,7 +127,6 @@ export function compileBlock(block) {
         epochs: numberField(block, "EPOCHS"),
         model: compileBlock(inputBlock(block, "MODEL")),
         dataset: compileBlock(inputBlock(block, "DATASET")),
-        learning_rate: numberField(block, "LEARNING_RATE"),
         loss_function: textField(block, "LOSS_FUNCTION")
       };
     case "validate_model":
@@ -189,7 +187,7 @@ export function compileBlock(block) {
     case "layer_normalization": return { type: "layer_normalization" };
     case "batch_normalization": return { type: "batch_normalization" };
     case "GlobalAveragePooling2D": return { type: "global_average_pooling2d" };
-    case "reshape_layer": return { type: "reshape", shape: textField(block, "NEW_LAYER_FORMAT").split(',') };
+    case "reshape_layer": return { type: "reshape_layer", shape: textField(block, "NEW_LAYER_FORMAT").split(',') };
     case "alpha_dropout_layer": return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
     case "conv2d_layer":
       return {
@@ -383,7 +381,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         if (layer.type === "layer_normalization") {
           compiledLayers.push(`tf.layers.layerNormalization(${firstInputShapeConfig()})`);
         } else if (layer.type === "rnn_layer") {
-          compiledLayers.push(`tf.layers.rnn({
+          compiledLayers.push(`tf.layers.simpleRNN({
             units: ${layer.units},
             returnSequences: ${layer.returnSequences}${firstInputShape()}
           })`);

@@ -426,7 +426,7 @@ function InferencePanel({ target, initialResult }) {
   const [output, setOutput] = useState(null);
   const [error, setError] = useState("");
   const [isPredicting, setIsPredicting] = useState(false);
-  
+
   async function run(values) {
     if (!target || isPredicting) return;
     setError("");

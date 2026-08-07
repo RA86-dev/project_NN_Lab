@@ -20,16 +20,6 @@ Blockly.Blocks["mnist_dataset"] = {
             "NORMALIZE"
         )
     this.appendDummyInput()
-        .appendField("Split")
-        .appendField(
-            new Blockly.FieldDropdown([
-                ['Training','TRAINING'],
-                ['Testing','TESTING'],
-                ['Both','BOTH']
-            ]),
-            "Split"
-        )
-    this.appendDummyInput()
         .appendField("Dataset Size")
         .appendField(
             new Blockly.FieldNumber(1000),
