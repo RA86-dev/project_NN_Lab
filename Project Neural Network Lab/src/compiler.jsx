@@ -30,6 +30,13 @@ function compileModelContainer(node, context) {
   }
   return compiler({ node, ...context });
 }
+const operations = { // DO not shorten these!
+    ADD: "add",
+    SUBTRACT: "sub",
+    MULTIPLY: "mul",
+    DIVIDE: "div",
+    POWER: "pow"
+}
 
 function fail(message, block) {
   const suffix = block?.type ? ` (block: ${block.type})` : "";
@@ -60,75 +67,37 @@ function numberField(block, name) {return Number(block.fields[name]);}
 function textField(block, name) {return String(block.fields[name] ?? "");}
 
 function compileMathExpression(block) {
-  if (!block) return { type: "math_variable" };
-
-  switch (block.type) {
-    case "math_number_value":
-      return { type: "math_number", value: numberField(block, "VALUE") };
-    case "math_x_value":
-      return { type: "math_variable" };
-    case "math_arithmetic_value":
-      return {
-        type: "math_arithmetic",
-        operation: textField(block, "OPERATION"),
-        left: compileMathExpression(inputBlock(block, "LEFT")),
-        right: compileMathExpression(inputBlock(block, "RIGHT")),
-      };
-    case "math_function_value":
-      return {
-        type: "math_function",
-        functionName: textField(block, "FUNCTION"),
-        value: compileMathExpression(inputBlock(block, "VALUE")),
-      };
-    case "rnn_layer":
-      return {
-        type: "rnn",
-        units: numberField(block, "UNITS"),
-        returnSequences: block.fields.RETURN_SEQUENCES === true || block.fields.RETURN_SEQUENCES === "TRUE",
-      };
-    default:
-      fail("Unknown math expression " + block.type, block);
-  }
+    if (block.type == "math_number_value") {
+        return { type: "math_number", value: numberField(block, "VALUE")}
+    } else if (block.type == "math_x_value") {
+        return { type: "math_variable" }
+    } else if (block.type == "math_arithmetic_value") {
+        return {
+            type: "math_arithmetic",
+            operation: textField(block, "OPERATION"),
+            left: compileMathExpression(inputBlock(block,"LEFT")),
+            right: compileMathExpression(inputBlock(block, "RIGHT"))
+        }
+    } else {
+        failCompile(`Unkown Math Expression! ${block.type}, ${block}`)
+    }
 }
 
-function compileMathExpressionCode(node) {
-  if (node.type === "math_number") return JSON.stringify(node.value);
-  if (node.type === "math_variable") return "xs";
-
-  if (node.type === "math_arithmetic") {
-    const operations = {
-      ADD: "add",
-      SUBTRACT: "sub",
-      MULTIPLY: "mul",
-      DIVIDE: "div",
-      POWER: "pow",
-    };
-    const operation = operations[node.operation];
-    if (!operation) fail("Unknown math operation " + node.operation);
-    return `tf.${operation}(${compileMathExpressionCode(node.left)}, ${compileMathExpressionCode(node.right)})`;
-  }
-
-  if (node.type === "math_function") {
-    const functions = {
-      ABS: "abs",
-      EXP: "exp",
-      LOG: "log",
-      SQRT: "sqrt",
-      SQUARE: "square",
-      SIN: "sin",
-      COS: "cos",
-      TAN: "tan",
-      TANH: "tanh",
-      SIGMOID: "sigmoid",
-    };
-    const functionName = functions[node.functionName];
-    if (!functionName) fail("Unknown math function " + node.functionName);
-    return `tf.${functionName}(${compileMathExpressionCode(node.value)})`;
-  }
-
-  fail("Unknown compiled math expression " + node.type);
+function compileMathExpressionCode(element) {
+    if (element.type == "math_number") {return Number(element.value)}
+    else if (element.type == "math_variable") {return 'xs'}
+    else if (element.type == "math_arithmetic") {
+        let operation = operations[element.operation]
+        if (!operation) {fail("Unkown math operation" + element.operation)}
+        return `tf.${operation}(${compileMathExpressionCode(element.left)}, ${compileMathExpressionCode(element.right)})`;
+    } else if (element.type == "math_function") {
+        if (!element.functionName) {fail("No function name!")}
+        let nameOfFunction = String(element.functionName).toLowerCase()
+        return `tf.${nameOfFunction}(${compileMathExpressionCode(element.value)})`
+    } else {
+        return fail("Unkown Math Expression: " + element.type)
+    }
 }
-
 export function compileBlock(block) {
   switch (block.type) {
     case "leakyReLU":
