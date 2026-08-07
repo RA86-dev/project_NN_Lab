@@ -3,6 +3,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 ![Maintainer](https://img.shields.io/badge/maintainer-RA86--dev-blue)
 [![Website monip.org](https://img.shields.io/website-up-down-green-red/http/ra86-dev.github.io/project_NN_Lab)](Server_Status)
+![GitHub License](https://img.shields.io/github/license/RA86-dev/project_NN_Lab)
 
 
 ---
