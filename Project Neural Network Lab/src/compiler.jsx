@@ -117,6 +117,8 @@ function compileMathExpressionCode(node) {
 
 export function compileBlock(block) {
   switch (block.type) {
+    case "leakyReLU":
+      return { type: "leakyReLU", alpha: numberField(block, "ALPHA")}
     case "main_program":
       return { type: "program", statements: compileChain(inputBlock(block, "STACK", false)) };
     case "train_model":
