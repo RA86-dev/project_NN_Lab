@@ -14,6 +14,15 @@
   backdrop-filter: blur(12px);
 }
 
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-sxqf{border-color:inherit;font-family:inherit;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+.docsBody {padding: 50px}
+
 .brandMark {
   width: 38px;
   height: 38px;
@@ -267,9 +276,44 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 footer { padding: 0 20px 28px; color: #98a2b3; text-align: center; font-size: 10px; letter-spacing: .02em; }
 footer span { margin: 0 5px; color: #c3cad4; }
 
+/* Detailed file manager */
+.fileManagerShell { min-height: 100vh; background: var(--surface-soft); }
+.managerNav { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+.managerNav a { color: #475467; font-size: 13px; font-weight: 650; text-decoration: none; }
+.managerNav a:hover, .managerNav a[aria-current="page"] { color: var(--blue); }
+.fileManagerMain { width: min(960px, 100%); margin: 0 auto; padding: 54px clamp(16px, 4vw, 42px) 80px; }
+.fileManagerHeading { margin-bottom: 24px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.fileManagerHeading > div > p:last-child { max-width: 540px; margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.fileCount { flex: none; padding: 7px 11px; color: #53606f; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-size: 11px; font-weight: 700; }
+.fileManagerPanel { min-height: 360px; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 30px rgba(20, 35, 60, .06); }
+.fileSearch { height: 43px; padding: 0 13px; display: flex; align-items: center; gap: 9px; color: #7b8494; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 9px; }
+.fileSearch:focus-within { border-color: #9db9ed; box-shadow: 0 0 0 3px rgba(37, 99, 235, .1); }
+.fileSearch input { width: 100%; min-width: 0; color: var(--ink); background: transparent; border: 0; outline: 0; font-size: 13px; }
+.fileSearch input::placeholder { color: #98a2b3; }
+.fileManagerMessage { margin: 12px 2px 0; color: #16704a; font-size: 11px; }
+.detailedFileList { margin-top: 18px; display: grid; gap: 8px; }
+.detailedFile { min-height: 68px; padding: 11px 12px; display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.detailedFile:hover { border-color: #c8d2e1; box-shadow: 0 4px 12px rgba(20, 35, 60, .05); }
+.detailedFileIcon { width: 38px; height: 38px; display: grid; place-items: center; color: #526174; background: var(--surface-soft); border-radius: 8px; }
+.detailedFileInfo { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.detailedFileInfo strong { overflow: hidden; color: var(--ink); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.detailedFileInfo span { color: var(--muted); font-size: 10px; }
+.detailedFileActions { display: flex; align-items: center; gap: 6px; }
+.detailedFileActions button { height: 34px; padding: 0 12px; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 7px; cursor: pointer; font-size: 11px; font-weight: 700; }
+.detailedFileActions button:hover:not(:disabled) { background: var(--blue-dark); }
+.detailedFileActions button:disabled { opacity: .45; cursor: not-allowed; }
+.detailedFileActions .iconButton { width: 34px; padding: 0; display: grid; place-items: center; color: #596678; background: var(--surface); border-color: #d6dde7; }
+.detailedFileActions .iconButton:hover:not(:disabled) { color: var(--blue); background: var(--blue-soft); border-color: #b9cced; }
+.detailedFileActions .dangerButton:hover:not(:disabled) { color: #b42318; background: #fff5f4; border-color: #f6c7c2; }
+.fileManagerEmpty { min-height: 270px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); text-align: center; }
+.fileManagerEmpty > span { width: 46px; height: 46px; margin-bottom: 12px; display: grid; place-items: center; background: var(--surface-soft); border-radius: 11px; }
+.fileManagerEmpty strong { color: var(--ink); font-size: 14px; }
+.fileManagerEmpty p { margin: 6px 0 14px; font-size: 11px; }
+.fileManagerEmpty a { color: var(--blue); font-size: 12px; font-weight: 700; text-decoration: none; }
+
 @media (prefers-color-scheme: dark) {
   .appShell { background: #0f141c; }
-  .appHeader { background: rgba(15, 20, 28, .92); }
+  .appHeader { background: rgba(15, 20, 28, .85); z-index: 1000;}
   .brandMark { color: #dbeafe; background: #24324a; }
   .headerMeta a { color: #aab5c5; }
   .localBadge, .runStatus { color: #a8b3c3; }
@@ -362,6 +406,14 @@ footer span { margin: 0 5px; color: #c3cad4; }
   .validationResult dd { color: #b9ddc8; }
   footer { color: #6f7b8d; }
   footer span { color: #465264; }
+  .managerNav a { color: #aab5c5; }
+  .fileCount { color: #a8b3c3; }
+  .fileManagerPanel { box-shadow: 0 12px 30px rgba(0, 0, 0, .18); }
+  .fileSearch:focus-within { border-color: #466d9f; }
+  .detailedFile:hover { border-color: #465366; box-shadow: 0 4px 12px rgba(0, 0, 0, .16); }
+  .detailedFileIcon { color: #a6b1c1; }
+  .detailedFileActions .iconButton { color: #b3bdca; border-color: #394554; }
+  .detailedFileActions .dangerButton:hover:not(:disabled) { color: #fca5a5; background: #35191b; border-color: #612a2e; }
 }
 
 @media (max-width: 900px) {
@@ -392,6 +444,14 @@ footer span { margin: 0 5px; color: #c3cad4; }
   .mnistPad canvas { max-width: 240px; margin: 0 auto; }
   .digitResult { grid-template-columns: 90px 1fr; }
   .validationResult { align-items: flex-start; flex-direction: column; }
+  .managerNav { gap: 12px; }
+  .managerNav a:first-child { display: inline; }
+  .fileManagerMain { padding: 30px 10px 50px; }
+  .fileManagerHeading { margin-inline: 6px; align-items: flex-start; flex-direction: column; gap: 14px; }
+  .fileManagerPanel { padding: 12px; border-radius: 11px; }
+  .detailedFile { grid-template-columns: 36px minmax(0, 1fr); }
+  .detailedFileActions { grid-column: 1 / -1; }
+  .detailedFileActions > button:first-child { flex: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -43,6 +43,18 @@ function BlocklyEditor({ setWorkspace }) {
       }
     };
     workspace.addChangeListener(closeFlyoutAfterInsert);
+
+    const projectName = new URLSearchParams(window.location.search).get("project");
+    const savedProject = projectName ? localStorage.getItem(projectName) : null;
+    if (savedProject) {
+      try {
+        Blockly.serialization.workspaces.load(JSON.parse(savedProject), workspace);
+        window.history.replaceState({}, "", window.location.pathname);
+      } catch (error) {
+        console.error(`Could not open saved project ${projectName}.`, error);
+      }
+    }
+
     setWorkspace(workspace);
     return () => {
       workspace.removeChangeListener(closeFlyoutAfterInsert);
@@ -646,17 +658,29 @@ function App() {
 
   return (
     <div className="appShell">
-      <header className="appHeader">
 
-        <div className="brandCopy">
-          <strong>Neural Network Lab</strong>
-          <span>A easy-to-use visual model builder for simple neural networks.</span>
-        </div>
+        <header className="appHeader">
 
-        <div className="headerMeta">
-          <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">GitHub</a>
-        </div>
-      </header>
+          <div className="brandCopy">
+            <strong>Neural Network Lab</strong>
+            <span>A easy-to-use visual model builder for simple neural networks.</span>
+          </div>
+
+          <div className="headerMeta">
+            <a href="https://github.com/RA86-dev/Project_NN_Lab" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <div className="headerMeta">
+            <a href="/">Playground</a>
+          </div>
+          <div className="headerMeta">
+            <a href="/fileManager.html">File Manager</a>
+          </div>
+          
+        </header>
+
+
+
+
 
       <main>
         <section className="workspacePanel">

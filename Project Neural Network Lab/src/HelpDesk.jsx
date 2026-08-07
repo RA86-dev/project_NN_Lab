@@ -14,7 +14,7 @@ function Icon({ name }) {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
 
-function loadList() {
+export function loadList() {
   const rawData = localStorage.getItem("data_stored");
   if (rawData == null) return [];
 
@@ -26,11 +26,12 @@ function loadList() {
 }
 export function addDefaultItems() {
   const currentList = loadList();
+  const hiddenDefaults = JSON.parse(localStorage.getItem("deleted_default_items") ?? "[]");
   const uniqueList = currentList.filter((file, index, files) =>
     file?.localStorageName &&
     files.findIndex((candidate) => candidate?.localStorageName === file.localStorageName) === index
   );
-  if (!uniqueList.some((file) => file.localStorageName === "MNIST Template Project")) {
+  if (!hiddenDefaults.includes("MNIST Template Project") && !uniqueList.some((file) => file.localStorageName === "MNIST Template Project")) {
     localStorage.setItem("MNIST Template Project", JSON.stringify(
       {
   "blocks": {
@@ -197,6 +198,12 @@ export function HelpDesk({ workspace }) {
     const nextList = [...currentList, { localStorageName: trimmedName }];
     localStorage.setItem(trimmedName, JSON.stringify(getCurrentCode(workspace)));
     localStorage.setItem("data_stored", JSON.stringify(nextList));
+    if (trimmedName === "MNIST Template Project") {
+      const hiddenDefaults = JSON.parse(localStorage.getItem("deleted_default_items") ?? "[]");
+      localStorage.setItem("deleted_default_items", JSON.stringify(
+        hiddenDefaults.filter((name) => name !== trimmedName),
+      ));
+    }
     setFiles(nextList);
     setFileName("");
   }
