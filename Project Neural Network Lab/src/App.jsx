@@ -559,6 +559,7 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
 
 async function fullExecution(workspace, logger) {
   const code = Interpreter(workspace);
+  console.log(code);
   const execute = new Function("tf", "logger", "console", "loadMNIST", code);
   const executionConsole = {
     log: (...values) => logger(values.map(formatLogPart).join(" ")),

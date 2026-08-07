@@ -36,7 +36,7 @@ contents: [
         {
             kind: "block",
             type: "main_program"
-        }
+        },
     ]
 },
 {

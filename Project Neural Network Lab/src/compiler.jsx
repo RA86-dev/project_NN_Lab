@@ -113,6 +113,8 @@ export function compileBlock(block) {
         dataset: compileBlock(inputBlock(block, "DATASET")),
         loss_function: textField(block, "LOSS_FUNCTION")
       };
+    case "rnn_layer":
+      return {type: "rnn_layer", units: numberField(block, "UNITS"), "returnSequences": textField(block, "RETURN_SEQUENCES")}
     case "validate_model":
       return {
         type: "validate",
@@ -392,7 +394,8 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             poolSize: ${layer.poolSize},
             strides: ${layer.strides}${firstInputShape()}
           })`);
-        } else if (layer.type === "dropout_layer") {
+        }
+        else if (layer.type === "dropout_layer") {
           compiledLayers.push(`tf.layers.dropout({ rate: ${layer.dropoutRate}${firstInputShape()} })`);
         } else if (layer.type === "embedding_layer") {
           compiledLayers.push(`tf.layers.embedding({
