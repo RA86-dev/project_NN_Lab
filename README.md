@@ -12,6 +12,7 @@ A blockly based (*Scratch-style engine*) that allows you to run neural network m
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
 
 **NOTE:** Due to memory restrictions in the browser, do not expect large datasets to perform very well in the browser. This is due to browser restrictions from the browser's memory restrictions and how much memory you have.
+
 ## Features
 Currently, the following has been added:
 - Blockly Engine
@@ -24,9 +25,14 @@ Currently, the following has been added:
     - Conv2d Layer
     - Maxpooling2d Layer
     - Dropout Layer
+    - AlphaDropout
+    - GlobalAveragePooling2D
+    - Reshape
+    - LeakyReLU
     - Embedding Layer
     - LSTM Layer
-    - Multi-Head attention
+    - Multi-Head Attention
+    - Gaussian Noise
 - Normalization Layers
     - BatchNormalization
     - LayerNormalization
@@ -86,7 +92,10 @@ Every "fancy" word is listed here, along with a simplified definition.
 - Batch Normalization - Standardizes the inputs to each layer of a neural network.
 - Layer Normalization - Instead of normalizing across a batch of data (Batch Normalization), it calculates the mean and variability across the features of a training example.
 - MNIST dataset - The MNIST dataset is a 70,000 images dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
-
+- Alpha Dropout - A variation of dropout that maintains the mean and variance of the inputs, designed for self-normalizing networks (like SeLU!)
+- GlobalAveragePooling2D - Calculates the average value for each feature map, replacing the heavy Flatten and Dense layer to reduce model parameters.
+- LeakyReLU - A activation function based on ReLU that solves a issue of dead neurons by letting a tiny, non-zero signal pass through when inputs are negative.
+- Reshape - Alters the dimensions of a input tensor without changing the data.
 
 Here's a example model:
 
