@@ -4,6 +4,7 @@
 ![Maintainer](https://img.shields.io/badge/maintainer-RA86--dev-blue)
 [![Website monip.org](https://img.shields.io/website-up-down-green-red/http/ra86-dev.github.io/project_NN_Lab)](Server_Status)
 ![GitHub License](https://img.shields.io/github/license/RA86-dev/project_NN_Lab)
+![GitHub last commit](https://img.shields.io/github/last-commit/RA86-dev/project_NN_lab)
 
 
 ---
