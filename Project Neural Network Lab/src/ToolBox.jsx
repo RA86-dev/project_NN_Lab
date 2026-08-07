@@ -21,7 +21,7 @@ import "./blocks/layers/GaussianNoise"
 import "./blocks/layers/RecurrentNeuralNetwork"
 import "./blocks/layers/DropoutLayer"
 import "./blocks/layers/AlphaDropout"
-import "./blocks/layers/leakyRe LU"
+import "./blocks/layers/leakyReLU"
 import "./blocks/layers/GlobalAveragePooling"
 import "./blocks/layers/reshape"
 import "./blocks/layers/Flatten"
@@ -67,36 +67,31 @@ contents: [
 },
 {
     kind: "category",
-    name: "Neural Network Layers",
-    colour: "#995ba5",
+    name: "Actvation Layers",
+    colour: "#ff5959",
     contents: [
-        {
-            kind: "block",
-            type: "dense_layer"
-        },
-        {
-            kind: "block",
-            type: "flatten_layer"
-        },
-        {
-            kind: "block",
-            type: "gru_layer"
-        },
-        {
-            kind: "block",
-            type: "alpha_dropout_layer"
-        },
         {
             kind: "block",
             type: "activation_layer"
         },
         {
             kind: "block",
-            type: "conv2d_layer"
+            type: "leakyReLU"
+        }
+    ]
+},
+{
+    kind: "category",
+    name: "Non-NN Layers",
+    colour: "#38afff",
+    contents: [
+        {
+            kind: "block",
+            type: "flatten_layer"
         },
         {
             kind: "block",
-            type: "leakyReLU"
+            type: "alpha_dropout_layer"
         },
         {
             kind: "block",
@@ -112,11 +107,34 @@ contents: [
         },
         {
             kind: "block",
-            type: "rnn_layer"
+            type: "max_pooling2d_layer"
         },
         {
             kind: "block",
-            type: "max_pooling2d_layer"
+            type: "reshape_layer"
+        }
+    ]
+},
+{
+    kind: "category",
+    name: "Neural Network Layers",
+    colour: "#995ba5",
+    contents: [
+        {
+            kind: "block",
+            type: "dense_layer"
+        },
+        {
+            kind: "block",
+            type: "gru_layer"
+        },
+        {
+            kind: "block",
+            type: "conv2d_layer"
+        },
+        {
+            kind: "block",
+            type: "rnn_layer"
         },
         {
             kind: "block",
@@ -130,10 +148,6 @@ contents: [
             kind: "block",
             type: "embedding_layer"
         },
-        {
-            kind: "block",
-            type: "reshape_layer"
-        }
     ]
 },
 

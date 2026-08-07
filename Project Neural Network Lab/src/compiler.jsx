@@ -16,6 +16,21 @@ function modelUsesSequenceInput(layers) {
   return sequenceLayerTypes.has(shapeDefiningLayer?.type);
 }
 
+const modelCompilers = Object.freeze({
+  sequential: ({ compiledLayers }) =>
+    `tf.sequential({ layers: [${compiledLayers.join(",")}] })`,
+  
+});
+
+function compileModelContainer(node, context) {
+  const modelKind = node.modelKind ?? "sequential";
+  const compiler = modelCompilers[modelKind];
+  if (typeof compiler !== "function") {
+    fail(`Unknown model kind ${modelKind}`, node);
+  }
+  return compiler({ node, ...context });
+}
+
 function fail(message, block) {
   const suffix = block?.type ? ` (block: ${block.type})` : "";
   throw new Error(message + suffix);
@@ -175,7 +190,12 @@ export function compileBlock(block) {
     case "activation_layer":
       return { type: "activation", activation: textField(block, "ACTIVATION") };
     case "sequential_neural_network":
-      return { type: "model", name: textField(block, "MODEL_NAME"), layers: compileChain(inputBlock(block, "LAYERS", false)) };
+      return {
+        type: "model",
+        modelKind: "sequential",
+        name: textField(block, "MODEL_NAME"),
+        layers: compileChain(inputBlock(block, "LAYERS", false)),
+      };
     case "dense_layer":
       return { type: "dense", units: numberField(block, "UNITS"), activation: textField(block, "ACTIVATION") };
     case "gru_layer":
@@ -488,7 +508,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         }
         index += 1;
       }
-      return `tf.sequential({ layers: [${compiledLayers.join(",")}] })`;
+      return compileModelContainer(node, { compiledLayers, inputShape });
     }
     case "train": {
       const dataset = node.dataset;

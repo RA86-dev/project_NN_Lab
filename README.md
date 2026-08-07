@@ -33,7 +33,7 @@ Currently, the following has been added:
     - LeakyReLU
     - Embedding Layer
     - LSTM Layer
-    - Flatten LAyers
+    - Flatten Layers
     - Multi-Head Attention
     - Gaussian Noise
 - Normalization Layers
