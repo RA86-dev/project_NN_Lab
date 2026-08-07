@@ -140,6 +140,15 @@ export function compileBlock(block) {
         normalize: block.fields.NORMALIZE === true || block.fields.NORMALIZE === "TRUE",
         dataset_size: numberField(block, "DATASET_SIZE"),
       };
+    case "xor_dataset":
+      return {
+        type: "dataset",
+        name: "xor",
+        task: "classification",
+        inputShape: [2],
+        outputShape: [2],
+        samples: numberField(block, "SAMPLES"),
+      };
     case "math_dataset":
       return {
         type: "dataset",
@@ -300,6 +309,22 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
     xs: ${context.sequenceInput ? "xs.reshape([points, 1, 1])" : "xs"},
     ys
   };
+}`;
+      }
+
+      if (node.name === "xor") {
+        return `function generateData() {
+  console.log("Generating XOR dataset...");
+  const samples = ${node.samples};
+  const inputPatterns = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  const labelPatterns = [[1, 0], [0, 1], [0, 1], [1, 0]];
+  const inputs = Array.from({ length: samples }, (_, index) => inputPatterns[index % 4]);
+  const labels = Array.from({ length: samples }, (_, index) => labelPatterns[index % 4]);
+  let xs = tf.tensor2d(inputs, [samples, 2]);
+  const ys = tf.tensor2d(labels, [samples, 2]);
+  ${context.sequenceInput ? "xs = xs.reshape([samples, 1, 2]);" : ""}
+  console.log("XOR dataset generated", xs.shape, ys.shape);
+  return { xs, ys };
 }`;
       }
 

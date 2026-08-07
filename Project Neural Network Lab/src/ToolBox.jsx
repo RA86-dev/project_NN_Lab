@@ -4,6 +4,7 @@ import "./blocks/main_program"
 import "./blocks/dataset/math_dataset"
 import "./blocks/dataset/math_expressions"
 import "./blocks/dataset/mnist_dataset"
+import "./blocks/dataset/xor_dataset"
 import "./blocks/dataset/upload_dataset"
 import "./blocks/layers/GRUModel"
 import "./blocks/training/train"
@@ -191,6 +192,10 @@ contents: [
         {
             kind: "block",
             type: "mnist_dataset"
+        },
+        {
+            kind: "block",
+            type: "xor_dataset"
         },
         {
             kind: "block",

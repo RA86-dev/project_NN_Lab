@@ -64,6 +64,15 @@ export const definitions = {
     MNIST is a online, public dataset for handwriting recognition. It is used for benchmarking models, since most models can complete the MNIST test easily.
     **NOTE:** Mnist is quite laggy. Do not expect great performance.
     `,
+    xor_dataset: `
+    #### XOR Dataset
+    Generates the four XOR input pairs and repeats them evenly to create a balanced two-class classification dataset.
+
+    The expected outputs are **0** when both inputs match and **1** when they differ. Use at least one hidden Dense layer with a nonlinear activation, followed by a 2-neuron Softmax output layer and Categorical Crossentropy loss.
+
+    ##### Arguments:
+    - Samples - Total examples to generate. This changes in steps of four so every XOR combination appears equally often.
+    `,
     upload_dataset: `
     #### Upload Dataset
     Uploads a local JSON or JSONL file for model training or validation.
