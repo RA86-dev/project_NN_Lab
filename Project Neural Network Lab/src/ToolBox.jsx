@@ -26,6 +26,8 @@ import "./blocks/layers/leakyReLU"
 import "./blocks/layers/GlobalAveragePooling"
 import "./blocks/layers/reshape"
 import "./blocks/layers/Flatten"
+import "./blocks/layers/PermuteLayer"
+import "./blocks/layers/upSampling2d"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -89,6 +91,14 @@ contents: [
         {
             kind: "block",
             type: "flatten_layer"
+        },
+        {
+            kind: "block",
+            type: "permute_layer"
+        },
+        {
+            kind: "block",
+            type: "up_sampling_2d"
         },
         {
             kind: "block",

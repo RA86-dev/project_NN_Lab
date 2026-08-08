@@ -18,10 +18,7 @@ export async function loadMNIST(dataset_size) {
     ).slice(0, dataset_size);
     const xs = tf.tensor2d(
         images,
-        [
-            images.length,
-            784
-        ]
+        [images.length,784]
     )
     .reshape([
         -1,
@@ -29,6 +26,7 @@ export async function loadMNIST(dataset_size) {
         28,
         1
     ]);
+    console.log("Shape is [-1, 28, 28, 1]")
 
 
     const ys = tf.oneHot(

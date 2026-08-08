@@ -8,7 +8,8 @@
 
 
 ---
-A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**
+A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**. This was made for Stardance Hackclub (*2026-2027*).
+
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
 
@@ -76,7 +77,7 @@ In this project, AI was used for the user interface and debugging issues along w
 
 ## Getting Started Guide (How to Use)
 Hello! This is a guide on how to use my project.
-The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system.
+The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system. Note, you might need a lot of Neural network knowledge to use this, however, its made to make it easier to understand and build scripts to train and experiment with AI models.
 ### Vocabulary
 Every "fancy" word is listed here, along with a simplified definition.
 - Model - the neural network.

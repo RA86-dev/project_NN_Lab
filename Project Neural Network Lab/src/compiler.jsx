@@ -130,6 +130,10 @@ export function compileBlock(block) {
       return { type: "infer", mode: "mnist", modelId: textField(block, "MODEL_ID") };
     case "flatten_layer":
       return { type: "flatten"}
+    case "permute_layer":
+      return { type: "permute", dims: textField(block, "DIMS")}
+    case "up_sampling_2d":
+      return { type: "upSampling2D", size: textField(block, "SIZE"), interpolation: textField(block, "INTERPOLATION")}
     case "mnist_dataset":
       return {
         type: "dataset",
@@ -403,6 +407,20 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
           })`);
         } else if (layer.type === "batch_normalization") {
           compiledLayers.push(`tf.layers.batchNormalization(${firstInputShapeConfig()})`);
+        } else if (layer.type === "permute") {
+          let array_dims = layer.dims.split(',').map(Number);
+          console.log(`Created array ${array_dims}`);
+          compiledLayers.push(`
+            tf.layers.permute({
+              dims: ${JSON.stringify(array_dims)}${firstInputShape()}
+            })
+            `);
+        } else if (layer.type === "upSampling2D") {
+          let size_l = layer.size.split(',').map(Number);
+          compiledLayers.push(`tf.layers.upSampling2d({
+            size: ${JSON.stringify(size_l)},
+            interpolation: ${JSON.stringify(layer.interpolation)}${firstInputShape()}
+          })`);
         } else if (layer.type === "activation") {
           compiledLayers.push(`tf.layers.activation({ activation: ${JSON.stringify(layer.activation)}${firstInputShape()} })`);
         } else if (layer.type === "conv2d") {
