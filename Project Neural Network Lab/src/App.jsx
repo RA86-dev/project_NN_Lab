@@ -1,4 +1,3 @@
-import { loadMNIST } from "./mnist";
 import { useEffect, useRef, useState } from "react";
 import * as Blockly from "blockly";
 import * as tf from "@tensorflow/tfjs";
@@ -7,6 +6,7 @@ import '@tensorflow/tfjs-backend-webgpu'
 import '@tensorflow/tfjs-backend-webgl'
 import "./App.css";
 import { HelpDesk } from "./HelpDesk";
+
 
 import { toolbox } from "./ToolBox";
 import { Interpreter } from "./compiler";
@@ -273,21 +273,6 @@ function ActivationHeatmap({ layers }) {
   );
 }
 
-async function predictWithModel(target, values) {
-  const expected = target.metadata.inputShape.reduce((total, size) => total * size, 1);
-  if (values.length !== expected) throw new Error(`Expected ${expected} values, received ${values.length}.`);
-  if (values.some((value) => !Number.isFinite(value))) throw new Error("Use numbers separated by commas or spaces.");
-
-  const prepared = target.metadata.normalized ? values.map((value) => value / 255) : values;
-  const input = tf.tensor(prepared, [1, ...target.metadata.inputShape]);
-  const rawOutput = target.model.predict(input);
-  const outputs = Array.isArray(rawOutput) ? rawOutput : [rawOutput];
-  const result = Array.from(await outputs[0].data());
-  input.dispose();
-  outputs.forEach((tensor) => tensor.dispose());
-  return result;
-}
-
 function MnistPad({ onPredict, isPredicting }) {
   const canvasRef = useRef(null);
   const drawing = useRef(false);
@@ -421,18 +406,18 @@ function PredictionOutput({ output, classification }) {
   );
 }
 
-function InferencePanel({ target, initialResult }) {
+function InferencePanel({ target, initialResult, predict }) {
   const [input, setInput] = useState("1");
   const [output, setOutput] = useState(null);
   const [error, setError] = useState("");
   const [isPredicting, setIsPredicting] = useState(false);
 
   async function run(values) {
-    if (!target || isPredicting) return;
+    if (!target || !predict || isPredicting) return;
     setError("");
     setIsPredicting(true);
     try {
-      setOutput(await predictWithModel(target, values));
+      setOutput(await predict(target.modelId, values));
     } catch (predictionError) {
       setError(formatLogPart(predictionError));
     } finally {
@@ -453,7 +438,7 @@ function InferencePanel({ target, initialResult }) {
       </div>
 
       {isMnist ? (
-        <MnistPad onPredict={run} isPredicting={isPredicting} />
+        <MnistPad onPredict={run} isPredicting={isPredicting || !predict} />
       ) : (
         <form className="inferenceForm" onSubmit={(event) => {
           event.preventDefault();
@@ -461,7 +446,7 @@ function InferencePanel({ target, initialResult }) {
           run(values);
         }}>
           <label htmlFor="inferenceInput">{target.mode === "math" ? "x value" : `Input values (${expected} required)`}</label>
-          <div><input id="inferenceInput" value={input} onChange={(event) => setInput(event.target.value)} inputMode="decimal" placeholder={target.mode === "math" ? "e.g. 4.5" : "e.g. 0.2, 0.8"} /><button type="submit" disabled={isPredicting}>{isPredicting ? "Running…" : "Predict"}</button></div>
+          <div><input id="inferenceInput" value={input} onChange={(event) => setInput(event.target.value)} inputMode="decimal" placeholder={target.mode === "math" ? "e.g. 4.5" : "e.g. 0.2, 0.8"} /><button type="submit" disabled={isPredicting || !predict}>{isPredicting ? "Running…" : "Predict"}</button></div>
         </form>
       )}
 
@@ -485,7 +470,7 @@ function ValidationResult({ result }) {
   );
 }
 
-function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, inferenceResult, validationResult }) {
+function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, inferenceResult, validationResult, predict }) {
   const lastLoss = lossHistory.at(-1)?.loss;
   const [activeView, setActiveView] = useState("training");
   const views = [
@@ -533,7 +518,7 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
 
         {activeView === "inference" && (
           inferenceTarget
-            ? <InferencePanel target={inferenceTarget} initialResult={inferenceResult} />
+            ? <InferencePanel target={inferenceTarget} initialResult={inferenceResult} predict={predict} />
             : <div className="resultEmpty"><span className="placeholderIcon"><Icon name="spark" /></span><p>Add an inference block after training to use this view.</p></div>
         )}
 
@@ -556,17 +541,73 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
     </section>
   );
 }
-
 async function fullExecution(workspace, logger) {
   const code = Interpreter(workspace);
-  console.log(code);
-  const execute = new Function("tf", "logger", "console", "loadMNIST", code);
-  const executionConsole = {
-    log: (...values) => logger(values.map(formatLogPart).join(" ")),
-  };
-  await execute(tf, logger, executionConsole, loadMNIST);
-}
 
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(
+      new URL("./worker/nnExecutionWorker.js", import.meta.url),
+      { type: "module" }
+    );
+    const pendingPredictions = new Map();
+    let nextRequestId = 1;
+    let trainingSettled = false;
+
+    const client = {
+      predict(modelId, values) {
+        return new Promise((resolvePrediction, rejectPrediction) => {
+          const requestId = nextRequestId;
+          nextRequestId += 1;
+          pendingPredictions.set(requestId, {
+            resolve: resolvePrediction,
+            reject: rejectPrediction,
+          });
+          worker.postMessage({ type: "PREDICT", requestId, modelId, values });
+        });
+      },
+      terminate() {
+        worker.terminate();
+        const error = new Error("The model worker was stopped.");
+        pendingPredictions.forEach(({ reject: rejectPrediction }) => rejectPrediction(error));
+        pendingPredictions.clear();
+      },
+    };
+
+    worker.onmessage = (event) => {
+      const data = event.data;
+      if (data?.type === "TRAINING_COMPLETE") {
+        trainingSettled = true;
+        resolve(client);
+      } else if (data?.type === "PREDICTION_RESULT") {
+        const pending = pendingPredictions.get(data.requestId);
+        pendingPredictions.delete(data.requestId);
+        pending?.resolve(data.output);
+      } else if (data?.type === "ERROR") {
+        const error = new Error(data.message);
+        if (data.requestId != null) {
+          const pending = pendingPredictions.get(data.requestId);
+          pendingPredictions.delete(data.requestId);
+          pending?.reject(error);
+        } else if (!trainingSettled) {
+          client.terminate();
+          reject(error);
+        } else {
+          logger({ type: "worker-error", message: error.message });
+        }
+      } else {
+        logger(data);
+      }
+    };
+
+    worker.onerror = (error) => {
+      client.terminate();
+      if (!trainingSettled) reject(error);
+      else logger({ type: "worker-error", message: error.message });
+    };
+
+    worker.postMessage({ type: "START_TRAINING", code });
+  });
+}
 function LowerElements({ workspace }) {
   const [logs, setLogs] = useState([]);
   const [lossHistory, setLossHistory] = useState([]);
@@ -575,11 +616,18 @@ function LowerElements({ workspace }) {
   const [inferenceResult, setInferenceResult] = useState(null);
   const [validationResult, setValidationResult] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [executionClient, setExecutionClient] = useState(null);
+  const executionClientRef = useRef(null);
+
+  useEffect(() => () => executionClientRef.current?.terminate(), []);
 
   async function executeWorkspace() {
     if (!workspace || isRunning) return;
 
-    setLogs([]);
+    executionClientRef.current?.terminate();
+    executionClientRef.current = null;
+    setExecutionClient(null);
+    setLogs(["Starting training worker…"]);
     setLossHistory([]);
     setActivationLayers([]);
     setInferenceTarget(null);
@@ -588,7 +636,7 @@ function LowerElements({ workspace }) {
     setIsRunning(true);
 
     try {
-      await fullExecution(workspace, (message) => {
+      const client = await fullExecution(workspace, (message) => {
         if (typeof message === "object" && message.type === "epoch") {
           setLossHistory((current) => [...current, {
             epoch: message.epoch,
@@ -597,6 +645,10 @@ function LowerElements({ workspace }) {
             accuracy: message.accuracy,
             valAccuracy: message.valAccuracy,
           }]);
+          setLogs((current) => [
+            ...current,
+            `Epoch ${message.epoch}: loss=${formatChartNumber(message.loss)}`,
+          ]);
           return;
         }
         if (typeof message === "object" && message.type === "activation-map") {
@@ -621,8 +673,14 @@ function LowerElements({ workspace }) {
           setLogs((current) => [...current, `Validation (${message.modelId}): loss ${message.loss}${message.accuracy == null ? "" : `, accuracy ${(message.accuracy * 100).toFixed(1)}%`}`]);
           return;
         }
+        if (typeof message === "object" && message.type === "worker-error") {
+          setLogs((current) => [...current, `Worker error: ${message.message}`]);
+          return;
+        }
         setLogs((current) => [...current, formatLogPart(message)]);
       });
+      executionClientRef.current = client;
+      setExecutionClient(client);
       setLogs((current) => [...current, "Execution complete."]);
     } catch (error) {
       setLogs((current) => [...current, `Error: ${formatLogPart(error)}`]);
@@ -648,6 +706,7 @@ function LowerElements({ workspace }) {
           inferenceTarget={inferenceTarget}
           inferenceResult={inferenceResult}
           validationResult={validationResult}
+          predict={executionClient?.predict}
           isRunning={isRunning}
         />
       </div>

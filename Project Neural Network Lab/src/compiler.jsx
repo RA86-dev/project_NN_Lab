@@ -79,7 +79,7 @@ function compileMathExpression(block) {
             right: compileMathExpression(inputBlock(block, "RIGHT"))
         }
     } else {
-        failCompile(`Unkown Math Expression! ${block.type}, ${block}`)
+        fail(`Unknown Math Expression! ${block.type}`)
     }
 }
 
@@ -277,7 +277,7 @@ function metadataCode(dataset, sequenceInput) {
 export function compileCode(node, context = {}) {
   switch (node.type) {
     case "program":
-      return `const modelRegistry = new Map();
+      return `const modelRegistry = runtime.modelRegistry;
 async function predictRecord(record, values) {
   const expected = record.metadata.inputShape.reduce((total, size) => total * size, 1);
   if (values.length !== expected) {
@@ -609,7 +609,7 @@ logger({ type: "model-trained", modelId: ${JSON.stringify(node.model.name)}, met
 const record = modelRegistry.get(${id});
 if (!record) throw new Error("No trained model named " + ${id} + ". Place inference after its Train block.");
 if (record.metadata.dataset !== "mnist") throw new Error("MNIST drawing inference requires a model trained on MNIST.");
-logger({ type: "inference-ready", mode: "mnist", modelId: ${id}, model: record.model, metadata: record.metadata });
+logger({ type: "inference-ready", mode: "mnist", modelId: ${id}, metadata: record.metadata });
 }`;
       }
       const values = node.mode === "math"
@@ -621,7 +621,7 @@ if (!record) throw new Error("No trained model named " + ${id} + ". Place infere
 const inputValues = ${values};
 if (inputValues.some(value => !Number.isFinite(value))) throw new Error("Inference input must contain only numbers.");
 const output = await predictRecord(record, inputValues);
-logger({ type: "inference-ready", mode: ${JSON.stringify(node.mode)}, modelId: ${id}, model: record.model, metadata: record.metadata });
+logger({ type: "inference-ready", mode: ${JSON.stringify(node.mode)}, modelId: ${id}, metadata: record.metadata });
 logger({ type: "inference-result", mode: ${JSON.stringify(node.mode)}, modelId: ${id}, input: inputValues, output });
 }`;
     }

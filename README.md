@@ -13,7 +13,7 @@ A blockly based (*Scratch-style engine*) that allows you to run neural network m
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
 
-**NOTE:** Due to memory restrictions in the browser, do not expect large datasets to perform very well in the browser. This is due to browser restrictions from the browser's memory restrictions and how much memory you have.
+**NOTE:** Due to memory restrictions in the browser, do not expect large datasets to perform very well in the browser. This is due to browser restrictions from the browser's memory restrictions and how much memory you have. However, we have swapped to Web Workers, meaning that training is performed on a seperate "worker" to prevent the other workers (Including the frontend) from lagging.
 
 ## Features
 Currently, the following has been added:
@@ -21,6 +21,7 @@ Currently, the following has been added:
 - Sequential Neural Network 
 - A Chart for neural network weight values + Built in presets
 - WebGPU/WebGL support! 
+    - Web Workers!
 - Multiple Layers:
     - GRU
     - Dense Layers
