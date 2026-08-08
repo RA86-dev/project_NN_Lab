@@ -28,6 +28,7 @@ import "./blocks/layers/reshape"
 import "./blocks/layers/Flatten"
 import "./blocks/layers/PermuteLayer"
 import "./blocks/layers/upSampling2d"
+import "./blocks/layers/seperableConv2d"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -134,6 +135,10 @@ contents: [
         {
             kind: "block",
             type: "dense_layer"
+        },
+        {
+            kind: "block",
+            type: "seperableConv2d"
         },
         {
             kind: "block",

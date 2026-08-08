@@ -193,6 +193,19 @@ export function compileBlock(block) {
     case "GlobalAveragePooling2D": return { type: "global_average_pooling2d" };
     case "reshape_layer": return { type: "reshape_layer", shape: textField(block, "NEW_LAYER_FORMAT").split(',') };
     case "alpha_dropout_layer": return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
+    case "separable_conv2d_layer":
+      return {
+        type: "separable_conv2d",
+        filters: numberField(block, "FILTERS"),
+        kernelSize: textField(block, "KERNEL_SIZE").includes(',') 
+          ? textField(block, "KERNEL_SIZE").split(',').map(Number) 
+          : numberField(block, "KERNEL_SIZE"),
+        strides: textField(block, "STRIDES").includes(',') 
+          ? textField(block, "STRIDES").split(',').map(Number) 
+          : numberField(block, "STRIDES"),
+        padding: textField(block, "PADDING"),
+        activation: textField(block, "ACTIVATION"),
+      };
     case "conv2d_layer":
       return {
         type: "conv2d",
@@ -451,7 +464,15 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             num_heads: ${layer.heads},
             key_dim: ${layer.keyDimensions}${firstInputShape()}
           })`);
-        }  else if (layer.type == "gaussian_noise") {
+        } else if (layer.type === "separable_conv2d") {
+            compiledLayers.push(`tf.layers.separableConv2d({
+              filters: ${layer.filters},
+              kernelSize: ${JSON.stringify(layer.kernelSize)},
+              strides: ${JSON.stringify(layer.strides)},
+              padding: ${JSON.stringify(layer.padding)},
+              activation: ${JSON.stringify(layer.activation)}${firstInputShape()}
+            })`);
+        } else if (layer.type == "gaussian_noise") {
           compiledLayers.push(`tf.layers.gaussianNoise({ stddev: ${layer.stddev}${firstInputShape()} })`);
         } else if (layer.type === "alpha_dropout_layer") {
           compiledLayers.push(`tf.layers.alphaDropout({ rate: ${layer.rate}${firstInputShape()} })`);
