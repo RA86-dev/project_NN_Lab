@@ -193,7 +193,7 @@ export function compileBlock(block) {
     case "GlobalAveragePooling2D": return { type: "global_average_pooling2d" };
     case "reshape_layer": return { type: "reshape_layer", shape: textField(block, "NEW_LAYER_FORMAT").split(',') };
     case "alpha_dropout_layer": return { type: "alpha_dropout_layer", rate: numberField(block, "DROPOUT_RATE") };
-    case "separable_conv2d_layer":
+    case "seperableConv2d":
       return {
         type: "separable_conv2d",
         filters: numberField(block, "FILTERS"),
