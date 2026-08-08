@@ -112,3 +112,71 @@ This is how you configure a normal neural network model. In this case, we are us
     - Softmax - A function that turns a list of unconstrained numbers into a valid set of probabilities. Good for problems where you want to generate a list of predictions.
     - Tanh - A non-linear activation function that maps input values to a curve ranging strictly between -1 and 1. Due to this, the mean of averages is around 0, which helps models converge faster than Sigmoid.
 These are the most commonly used activations. Some are better than others for certain tasks, some worse for certain tasks.
+## Directory
+(*And no, this was not AI generated, this was just from running `tree` in the terminal*).
+```
+.
+├── eslint.config.js
+├── fileManager.html
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   └── mnist_handwritten_test.json
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── DetailedFileManager.jsx
+│   ├── Export_Import.jsx
+│   ├── HelpDesk.jsx
+│   ├── ToolBox.jsx
+│   ├── blocks
+│   │   ├── dataset
+│   │   │   ├── math_dataset.jsx
+│   │   │   ├── math_expressions.jsx
+│   │   │   ├── mnist_dataset.jsx
+│   │   │   ├── upload_dataset.jsx
+│   │   │   └── xor_dataset.jsx
+│   │   ├── inference
+│   │   │   ├── run_inference_model.jsx
+│   │   │   └── validate_model.jsx
+│   │   ├── layers
+│   │   │   ├── ActivationLayer.jsx
+│   │   │   ├── AlphaDropout.jsx
+│   │   │   ├── Conv2D.jsx
+│   │   │   ├── DenseLayer.jsx
+│   │   │   ├── DropoutLayer.jsx
+│   │   │   ├── Flatten.jsx
+│   │   │   ├── GRUModel.jsx
+│   │   │   ├── GaussianNoise.jsx
+│   │   │   ├── GlobalAveragePooling.jsx
+│   │   │   ├── LSTM.jsx
+│   │   │   ├── MaxPooling2D.jsx
+│   │   │   ├── PermuteLayer.jsx
+│   │   │   ├── RecurrentNeuralNetwork.jsx
+│   │   │   ├── embedding.jsx
+│   │   │   ├── leakyReLU.jsx
+│   │   │   ├── multihead_attention.jsx
+│   │   │   ├── reshape.jsx
+│   │   │   ├── seperableConv2d.jsx
+│   │   │   └── upSampling2d.jsx
+│   │   ├── main_program.jsx
+│   │   ├── math
+│   │   ├── neural_networks
+│   │   │   └── sequential.jsx
+│   │   ├── normalization_layers
+│   │   │   ├── BatchNormalization.jsx
+│   │   │   └── LayerNormalization.jsx
+│   │   └── training
+│   │       └── train.jsx
+│   ├── compiler.jsx
+│   ├── definitions.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   ├── mnist.jsx
+│   └── worker
+│       └── nnExecutionWorker.js
+└── vite.config.js
+
+12 directories, 50 files
+```
