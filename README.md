@@ -70,7 +70,7 @@ npm run start
 ## License
 Licensed under ISC/MIT [here](LICENSE)
 ## AI Use Declaration
-In this project, AI was used for the user interface and debugging issues along with writing some functions to help. However, it was not used to Write any documentation.
+In this project, AI was used for the user interface and debugging issues along with writing some functions. It was not used to write documentation.
 ## Example Image
 <p align="center">
   <img src="README_assets/screenshot.png" alt="Screenshot" width="600"/>
