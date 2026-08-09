@@ -396,7 +396,8 @@ logger({ type: "seed-set", seed: ${seed} });`;
       return `tf.layers.batchNormalization()`;
     case "model": {
       const dataset = context.dataset;
-      const layers = [...node.layers];
+      const seedNodes = node.layers.filter((layer) => layer.type === "set_seed");
+      const layers = node.layers.filter((layer) => layer.type !== "set_seed");
       const sequenceInput = modelUsesSequenceInput(layers);
       const inputShape = sequenceInput
         ? dataset.inputShape.length === 1 ? [1, dataset.inputShape[0]] : dataset.inputShape.slice(0, 2)
@@ -574,7 +575,16 @@ logger({ type: "seed-set", seed: ${seed} });`;
         }
         index += 1;
       }
-      return compileModelContainer(node, { compiledLayers, inputShape });
+      const compiledModel = compileModelContainer(node, { compiledLayers, inputShape });
+      if (seedNodes.length === 0) return compiledModel;
+
+      const compiledSeeds = seedNodes
+        .map((seedNode) => compileCode(seedNode, context))
+        .join("\n");
+      return `(() => {
+${compiledSeeds}
+return ${compiledModel};
+})()`;
     }
     case "train": {
       const dataset = node.dataset;
