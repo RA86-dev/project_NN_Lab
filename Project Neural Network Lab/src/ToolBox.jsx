@@ -258,5 +258,6 @@ contents: [
             type: 'train_model'
         }
     ]
-}
+}, 
+
 ]};

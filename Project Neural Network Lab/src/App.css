@@ -184,6 +184,20 @@ h2 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.2; letter-spa
 .transferMessage.isError { color: #b42318; }
 .visuallyHidden { width: 1px; height: 1px; padding: 0; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+.extensionImport { margin-top: 12px; padding: 14px; background: linear-gradient(145deg, #f8fbff, #f5f7fb); border: 1px solid #dce5f2; border-radius: 10px; }
+.extensionImportHeader { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: start; gap: 10px; }
+.extensionImportIcon { width: 34px; height: 34px; display: grid; place-items: center; color: var(--blue); background: #e8f1ff; border: 1px solid #d6e6ff; border-radius: 8px; }
+.extensionImportTitle { display: block; margin-top: 1px; color: #344054; font-size: 12px; font-weight: 750; }
+.extensionImportHeader p { margin: 3px 0 0; color: #778193; font-size: 10px; line-height: 1.45; }
+.extensionFileType { padding: 3px 6px; color: #526071; background: #fff; border: 1px solid #d9e1ec; border-radius: 5px; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .04em; }
+.extensionImportButton { width: 100%; min-height: 40px; margin-top: 12px; padding: 0 10px 0 12px; display: grid; grid-template-columns: 18px 1fr auto; align-items: center; gap: 8px; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 8px; box-shadow: 0 4px 10px rgba(37, 99, 235, .16); cursor: pointer; text-align: left; transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease; }
+.extensionImportButton > span { font-size: 11px; font-weight: 700; }
+.extensionImportButton small { padding: 4px 7px; color: #dbeafe; background: rgba(255, 255, 255, .12); border-radius: 5px; font-size: 9px; font-weight: 650; }
+.extensionImportButton:hover:not(:disabled) { background: var(--blue-dark); box-shadow: 0 6px 14px rgba(37, 99, 235, .22); transform: translateY(-1px); }
+.extensionImportButton:disabled { color: #98a2b3; background: #e7ebf1; border-color: #e0e5ec; box-shadow: none; cursor: not-allowed; }
+.extensionImportButton:disabled small { color: #98a2b3; background: #dce1e8; }
+.extensionImportNote { margin: 8px 1px 0; color: #8a94a3; font-size: 9px; line-height: 1.4; }
+
 .subsectionHeader { margin: 21px 0 10px; display: flex; align-items: center; justify-content: space-between; color: #344054; font-size: 12px; font-weight: 700; }
 .subsectionHeader > span { display: inline-flex; align-items: center; gap: 7px; }
 .subsectionHeader small { min-width: 23px; padding: 2px 6px; color: #667085; background: #eef1f5; border-radius: 999px; text-align: center; font-size: 10px; }
@@ -368,6 +382,14 @@ footer span { margin: 0 5px; color: #c3cad4; }
   .emptyFiles p { color: #c3cdd9; }
   .savedFileList button { color: #cbd5e1; background: #171e28; border-color: #2c3644; }
   .savedFileList button:hover { background: #202936; border-color: #465366; }
+  .extensionImport { background: linear-gradient(145deg, #151e2a, #121922); border-color: #2d3948; }
+  .extensionImportIcon { color: #93c5fd; background: #172a46; border-color: #284a77; }
+  .extensionImportTitle { color: #d7e0eb; }
+  .extensionImportHeader p,
+  .extensionImportNote { color: #8995a7; }
+  .extensionFileType { color: #aeb9c8; background: #202936; border-color: #354151; }
+  .extensionImportButton:disabled { color: #758195; background: #29323f; border-color: #313b49; }
+  .extensionImportButton:disabled small { color: #7f8a9a; background: #202833; }
   .blockDefinition { color: #9da9ba; background: #111821; border-color: #293341; }
   .blockDefinition.hasSelection { color: #c9d3df; }
   .blockDefinition code { color: #d8e1ec; background: #26303d; }

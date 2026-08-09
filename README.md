@@ -182,3 +182,4 @@ These are the most commonly used activations. Some are better than others for ce
 [Visit Here to see documentation](docs/README.md)
 - [Issue Reporting](docs/issue_reporting.md)
 - [AI Rules](docs/ai_rules.md)
+- [Extension Documentation](docs/extension_building.md)

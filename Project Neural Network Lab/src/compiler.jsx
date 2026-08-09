@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { getCurrentCode } from "./HelpDesk";
 import { prepareUploadedDataset } from "./blocks/dataset/upload_dataset";
-
+import { ExtensionRegistry } from "./extensions";
 const sequenceLayerTypes = new Set(["gru_layer", "lstm_layer", "rnn_layer"]);
 const shapePreservingLayerTypes = new Set([
   "layer_normalization",
@@ -260,6 +260,8 @@ export function compileBlock(block) {
         ),
       };
     default:
+      const extensionAbstractSyntax = ExtensionRegistry.compileBlock(block);
+      if (extensionAbstractSyntax) return extensionAbstractSyntax;
       fail("Unknown block " + block.type);
   }
 }

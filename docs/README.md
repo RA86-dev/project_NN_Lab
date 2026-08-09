@@ -13,3 +13,4 @@ Code Generation is done in function `compileCode` in `src/compiler.jsx`. Using A
 ## Other Information 
 - [Issue Reporting](issue_reporting.md)
 - [AI Rules](ai_rules.md)
+- [Extension Building](extension_building.md)
