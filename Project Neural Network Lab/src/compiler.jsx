@@ -485,7 +485,7 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
         } else if (layer.type == "global_average_pooling2d") {
           compiledLayers.push(`tf.layers.globalAveragePooling2d(${firstInputShapeConfig()})`);
         }
-        if (layer.type === "lstm_layer") {
+        else if (layer.type === "lstm_layer") {
             let end = index + 1;
 
             while (layers[end]?.type === "lstm_layer") {
@@ -526,12 +526,12 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
             continue;
           }
 
-        if (layer.type === "dense") {
+        else if (layer.type === "dense") {
           compiledLayers.push(`tf.layers.dense({ units: ${layer.units}, activation: ${JSON.stringify(layer.activation)}${firstInputShape()} })`);
           index += 1;
           continue;
         }
-        if (layer.type === "gru_layer") {
+        else if (layer.type === "gru_layer") {
           let end = index + 1;
           while (layers[end]?.type === "gru_layer") end += 1;
           const group = layers.slice(index, end);
@@ -543,6 +543,13 @@ ${node.statements.map((statement) => compileCode(statement, context)).join("\n")
           }
           index = end;
           continue;
+        } else {
+          const extensionJsCode = ExtensionRegistry.compileCode(layer, firstInputShape);
+          if (extensionJsCode) {
+            compiledLayers.push(extensionJsCode);
+          } else {
+            fail(`Unknown layer type inside model compiler: ${layer.type}`);
+          }
         }
         index += 1;
       }

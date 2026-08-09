@@ -2,8 +2,14 @@ export const ExtensionRegistry = {
     compileBlockRules: [],
     compileCodeRules: [],
     compileBlock(block) {
+        const extensionBlock = {
+            ...block,
+            getFieldValue(name) {
+                return block?.fields?.[name] ?? null;
+            },
+        };
         for (const rule of this.compileBlockRules) {
-            const result = rule(block);
+            const result = rule(extensionBlock);
             if (result) return result;
         }
         return null

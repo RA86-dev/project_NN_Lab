@@ -37,7 +37,8 @@ export default {
     },
   ],
 
-  // 3. Convert the Blockly block into your custom AST structure
+  // 3. Convert the serialized Blockly block into your custom AST structure
+  // The extension API provides getFieldValue() for compatibility with Blockly blocks.
   compileBlock(block) {
     if (block.type === "extension_leaky_relu_layer") {
       return {
@@ -55,9 +56,15 @@ export default {
     if (node.type === "extension_leaky_relu_layer") {
       const alpha = node.alpha ?? 0.2;
       // Note this has to return a VALID tfJS line.
-      return `tf.layers.leakyReLu({ alpha: ${alpha}${firstInputShape()} })`;
+      return `tf.layers.leakyReLU({ alpha: ${alpha}${firstInputShape()} })`;
     }
     return null; // Fall through if not this block
   },
 };
 ```
+
+The `compileBlock` callback receives the serialized block data used by Project NN
+Lab's compiler, rather than the live block from the Blockly workspace. You can
+read fields with `block.getFieldValue("FIELD_NAME")`. Other serialized data is
+available through properties such as `block.type`, `block.inputs`, and
+`block.next`.
