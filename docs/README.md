@@ -1,3 +1,4 @@
+
 # Project NN Lab
 Project Neural Network Lab is a Blockly-based neural network library that allows user to experiment with neural networks without writing a single piece of code. This is done through the use of `Blockly`, a frontend engine that was created by Raspberry Pi (visit [here](https://www.blockly.com/) to see Blockly's website) that creates a block-by-block style interface.
 
@@ -14,3 +15,4 @@ Code Generation is done in function `compileCode` in `src/compiler.jsx`. Using A
 - [Issue Reporting](issue_reporting.md)
 - [AI Rules](ai_rules.md)
 - [Extension Building](extension_building.md)
+
