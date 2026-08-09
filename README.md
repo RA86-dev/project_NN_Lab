@@ -8,7 +8,8 @@
 
 
 ---
-A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**. This was made for Stardance Hackclub (*2026-2027*).
+A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**. This was made for Stardance Hackclub (*2026-2027*). (NOTE: The CDN used in this project is from Stardance! if it is no longer available, please modify src/mnist.jsx and replace the link with the on from loremh below).
+
 
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
