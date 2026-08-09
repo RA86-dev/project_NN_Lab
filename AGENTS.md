@@ -70,7 +70,7 @@ This Project uses React and Vite. Do not add things like traditional NodeJS - th
 └── vite.config.js
 ```
 12 directories, 50 files
-## AI Ruless
+## AI Rules
 1. Do not edit without permission. First, come up with a plan and present it to the user. Do not edit anything unless given explicit permission from the user.
 2. Always double check through `npm run build` and let the user experiment to see if it works.
 3. When reporting a potential issue, please state a potential fix to this issue.
