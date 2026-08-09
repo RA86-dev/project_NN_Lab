@@ -80,7 +80,7 @@ Hello! This is a guide on how to use my project.
 The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system. Note, you might need a lot of Neural network knowledge to use this, however, its made to make it easier to understand and build scripts to train and experiment with AI models.
 ### Vocabulary
 Every "fancy" word is listed here, along with a simplified definition.
-- Model - the neural network.
+- Model - the neural network. A neural network in this case, is basically a artificial version of the brain network structure.
 - Activation Layer - A mathematical formula inside of a neural network. It decides whether the node should fire, or to pass the signal. It basically just adds nonlinearity.
 - Conv2d - Conv2d is a neural network architecture style, that basically identifies patterns in a 2d shape (thats where the "2d" in the name comes from). Its goal is to basically spot potential patterns, so its used for neural networks to be able to identify patterns. Conv meaning Convolution, Convolution uses a sliding layer to identify patterns.
 - Dense Layer - A dense layer is basically a layer where everything is connected. In some other architectures, such as MoE (Mixture of Experts), not all parameters are connected to make it more efficient. This is the most common block used in AI and Machine Learning.

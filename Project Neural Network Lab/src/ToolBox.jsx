@@ -27,6 +27,7 @@ import "./blocks/layers/GlobalAveragePooling"
 import "./blocks/layers/reshape"
 import "./blocks/layers/Flatten"
 import "./blocks/layers/PermuteLayer"
+import "./blocks/set_seed"
 import "./blocks/layers/upSampling2d"
 import "./blocks/layers/seperableConv2d"
 export const toolbox = {
@@ -40,7 +41,7 @@ contents: [
         {
             kind: "block",
             type: "main_program"
-        },
+        }
     ]
 },
 {
@@ -120,6 +121,10 @@ contents: [
         {
             kind: "block",
             type: "max_pooling2d_layer"
+        },
+        {
+            kind: "block",
+            type: "set_seed"
         },
         {
             kind: "block",

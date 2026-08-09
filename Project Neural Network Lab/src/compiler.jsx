@@ -104,6 +104,8 @@ export function compileBlock(block) {
       return { type: "leakyReLU", alpha: numberField(block, "ALPHA")}
     case "main_program":
       return { type: "program", statements: compileChain(inputBlock(block, "STACK", false)) };
+    case "set_seed":
+      return { type: "set_seed", seed: numberField(block, "SEED")}
     case "train_model":
       return {
         type: "train",
@@ -280,6 +282,16 @@ export function compileCode(node, context = {}) {
   switch (node.type) {
     case "program":
       return `const modelRegistry = runtime.modelRegistry;
+function createSeededRandom(seed) {
+  let state = seed >>> 0;
+  return function seededRandom() {
+    state += 0x6D2B79F5;
+    let value = state;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
 async function predictRecord(record, values) {
   const expected = record.metadata.inputShape.reduce((total, size) => total * size, 1);
   if (values.length !== expected) {
@@ -297,6 +309,15 @@ async function predictRecord(record, values) {
 return (async () => {
 ${node.statements.map((statement) => compileCode(statement, context)).join("\n")}
 })();`;
+
+    case "set_seed": {
+      if (!Number.isFinite(node.seed)) {
+        fail("Seed must be a finite number", node);
+      }
+      const seed = Math.trunc(node.seed);
+      return `Math.random = createSeededRandom(${seed});
+logger({ type: "seed-set", seed: ${seed} });`;
+    }
 
     case "dataset":
       if (node.name === "mnist") {

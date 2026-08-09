@@ -3,7 +3,6 @@ Project NN Lab is a full-purpose scratch-like (Blockly based) neural network exp
 ## Architecture Overview:
 This Project uses React and Vite. Do not add things like traditional NodeJS - this is to prevent it from becoming based on the backend. This is done to keep simplicity, and make it more widely available. 
 - **src/blocks/** - this is a directory organized into general categories. These use `Blockly.Blocks['name']` to define a function that is then used in `Toolbox.jsx`.
-- **public/** - as of this moment, there is just one file, called mnist_handwritten_test.json. This is a file with a JSON of the MNIST dataset. DO NOT DELETE! 
 
 ### Architecture Chart:
 ```
