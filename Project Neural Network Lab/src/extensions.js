@@ -23,7 +23,7 @@ export const ExtensionRegistry = {
     }
 }
 export async function registerExtension(inputJSCode, Blockly, workspace) {
-    let confirmation = confirm("Warning! Importing Extensions that you don't know what content has inside is very dangerous! Are you sure you want to import this extension")
+    let confirmation = confirm("Warning! Do you really want to import this extension? ")
     if (!confirmation) { return null; } // If they don't like the extension, return nothing to signify that there is nothing in the extension
     try {
         let encodedJS = encodeURIComponent(inputJSCode);
