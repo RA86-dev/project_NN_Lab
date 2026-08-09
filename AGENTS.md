@@ -6,7 +6,7 @@ This Project uses React and Vite. Do not add things like traditional NodeJS - th
 - **public/** - as of this moment, there is just one file, called mnist_handwritten_test.json. This is a file with a JSON of the MNIST dataset. DO NOT DELETE! 
 
 ### Architecture Chart:
-.
+```
 ├── eslint.config.js
 ├── fileManager.html
 ├── index.html
@@ -68,7 +68,7 @@ This Project uses React and Vite. Do not add things like traditional NodeJS - th
 │   └── worker
 │       └── nnExecutionWorker.js
 └── vite.config.js
-
+```
 12 directories, 50 files
 ## AI Ruless
 1. Do not edit without permission. First, come up with a plan and present it to the user. Do not edit anything unless given explicit permission from the user.
