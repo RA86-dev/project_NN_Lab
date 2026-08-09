@@ -178,3 +178,7 @@ These are the most commonly used activations. Some are better than others for ce
 
 12 directories, 50 files
 ```
+## Documentation Page
+[Visit Here to see documentation](docs/README.md)
+- [Issue Reporting](docs/issue_reporting.md)
+- [AI Rules](docs/ai_rules.md)
