@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as Blockly from "blockly";
 import * as tf from "@tensorflow/tfjs";
+import ModernTheme from '@blockly/theme-modern';
 import Chart from "chart.js/auto";
 import '@tensorflow/tfjs-backend-webgpu'
 import '@tensorflow/tfjs-backend-webgl'
@@ -32,6 +33,8 @@ function BlocklyEditor({ setWorkspace }) {
     const workspace = Blockly.inject(blocklyDiv.current, {
       toolbox,
       trashcan: true,
+      renderer: "thrasos",
+      theme: ModernTheme,
       scrollbars: true,
       zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 1.6, minScale: 0.45 },
       grid: { spacing: 24, length: 2, colour: "#d8dee9", snap: true },

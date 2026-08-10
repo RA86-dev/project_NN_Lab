@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blockly/theme-dark": "^13.2.0",
+    "@blockly/theme-highcontrast": "^13.2.0",
+    "@blockly/theme-modern": "^13.2.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-backend-webgpu": "^4.22.0",

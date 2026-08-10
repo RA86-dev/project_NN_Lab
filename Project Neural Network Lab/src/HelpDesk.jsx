@@ -1,8 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import * as Blockly from "blockly";
-import { definitions } from "./definitions";
 import { useEffect, useRef, useState } from "react";
-import Markdown from "react-markdown";
 import { ExportImport } from "./Export_Import";
 import { registerExtension } from "./extensions";
 
@@ -387,23 +385,6 @@ export function HelpDesk({ workspace }) {
         <p className="extensionImportNote">Only import extensions from sources you trust.</p>
       </div>
 
-      <div className="helpSection">
-        <div className="subsectionHeader">
-          <span>
-            <Icon name="help" /> Block reference
-          </span>
-        </div>
-        <p className="helpHint">
-          Select any block on the canvas to view its notes.
-        </p>
-        <div
-          className={`blockDefinition ${
-            selectedDefinition ? "hasSelection" : ""
-          }`}
-        >
-          <Markdown>{selectedDefinition || "Nothing selected yet."}</Markdown>
-        </div>
-      </div>
     </aside>
   );
 }
