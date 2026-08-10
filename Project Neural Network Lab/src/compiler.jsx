@@ -19,7 +19,36 @@ function modelUsesSequenceInput(layers) {
 const modelCompilers = Object.freeze({
   sequential: ({ compiledLayers }) =>
     `tf.sequential({ layers: [${compiledLayers.join(",")}] })`,
-  
+    mixture_of_experts: ({ compiledLayers, inputShape, node }) => {
+        const numExperts = node.expertCount ?? 4;
+        return `(() => {
+          const inputs = tf.input({ shape: ${JSON.stringify(inputShape)} });
+          let flattened_input = inputs.shape.length > 2 ? tf.layers.flatten().apply(inputs) : inputs;
+          let gateWeights = tf.layers.dense({ units: ${numExperts}, activation: 'softmax' }).apply(flattened_input);
+          let expertOutputs = [];
+
+          for (let i = 0; i < ${numExperts}; i++) {
+            let current = inputs;
+            ${compiledLayers.map(layerCode => `current = (${layerCode}).apply(current);`).join("\n        ")}
+            if (current.shape.length > 2) {
+              current = tf.layers.flatten().apply(current);
+            }
+            const reshaped = tf.layers.reshape({
+              targetShape: [1, current.shape[current.shape.length - 1]]
+            }).apply(current);
+            expertOutputs.push(reshaped);
+          }
+
+          let stackedExperts = tf.layers.concatenate({ axis: 1 }).apply(expertOutputs);
+          const routedOutput = tf.layers.dot({ axes: [1, 1] }).apply([gateWeights, stackedExperts]);
+
+          return tf.model({
+            inputs: inputs,
+            outputs: routedOutput
+          });
+        })()`;
+      }
+
 });
 
 function compileModelContainer(node, context) {
@@ -104,6 +133,8 @@ export function compileBlock(block) {
       return { type: "leakyReLU", alpha: numberField(block, "ALPHA")}
     case "main_program":
       return { type: "program", statements: compileChain(inputBlock(block, "STACK", false)) };
+    case "mixture_of_experts":
+      return { type: "model", modelKind: "mixture_of_experts", name: textField(block, "MODEL_NAME"), expertCount: numberField(block, "EXPERTS"), layers: compileChain(inputBlock(block, "LAYERS", false)) }
     case "set_seed":
       return { type: "set_seed", seed: numberField(block, "SEED")}
     case "train_model":
@@ -199,11 +230,11 @@ export function compileBlock(block) {
       return {
         type: "separable_conv2d",
         filters: numberField(block, "FILTERS"),
-        kernelSize: textField(block, "KERNEL_SIZE").includes(',') 
-          ? textField(block, "KERNEL_SIZE").split(',').map(Number) 
+        kernelSize: textField(block, "KERNEL_SIZE").includes(',')
+          ? textField(block, "KERNEL_SIZE").split(',').map(Number)
           : numberField(block, "KERNEL_SIZE"),
-        strides: textField(block, "STRIDES").includes(',') 
-          ? textField(block, "STRIDES").split(',').map(Number) 
+        strides: textField(block, "STRIDES").includes(',')
+          ? textField(block, "STRIDES").split(',').map(Number)
           : numberField(block, "STRIDES"),
         padding: textField(block, "PADDING"),
         activation: textField(block, "ACTIVATION"),
@@ -400,7 +431,7 @@ logger({ type: "seed-set", seed: ${seed} });`;
       const layers = node.layers.filter((layer) => layer.type !== "set_seed");
       const sequenceInput = modelUsesSequenceInput(layers);
       const inputShape = sequenceInput
-        ? dataset.inputShape.length === 1 ? [1, dataset.inputShape[0]] : dataset.inputShape.slice(0, 2)
+        ? (dataset.inputShape.length === 1 ? [1, dataset.inputShape[0]] : dataset.inputShape.slice(0, 2))
         : dataset.inputShape;
       const hasOutput = layers.at(-1)?.type === "dense" && layers.at(-1)?.units === dataset.outputShape[0];
       if (!hasOutput) {

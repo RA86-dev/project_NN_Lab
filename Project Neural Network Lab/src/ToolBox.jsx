@@ -3,6 +3,7 @@ import "./blocks/neural_networks/sequential"
 import "./blocks/main_program"
 import "./blocks/dataset/math_dataset"
 import "./blocks/dataset/math_expressions"
+import "./blocks/neural_networks/mixture_of_experts"
 import "./blocks/dataset/mnist_dataset"
 import "./blocks/dataset/xor_dataset"
 import "./blocks/dataset/upload_dataset"
@@ -52,7 +53,11 @@ contents: [
         {
         kind: "block",
         type: "sequential_neural_network"
-        }
+      },
+      {
+        kind: "block",
+        type: "mixture_of_experts"
+      }
     ]
 },
 {
@@ -263,6 +268,6 @@ contents: [
             type: 'train_model'
         }
     ]
-}, 
+},
 
 ]};
