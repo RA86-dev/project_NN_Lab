@@ -1,27 +1,33 @@
 import * as Blockly from "blockly";
 import { FieldActivation } from "../../custom_fields/activationMappedField";
+import { KernelSizeField } from "../../custom_fields/KernelSizeField";
 
 Blockly.Blocks["seperableConv2d"] = {
   init: function () {
-    const preview = new FieldActivation("relu");
+    const activationPreview = new FieldActivation("relu");
+    const kernelPreview = new KernelSizeField(3);
+
     this.appendDummyInput()
         .appendField("Separable Convolution 2D");
     this.appendDummyInput()
         .appendField("Filters: ")
         .appendField(
-            new Blockly.FieldNumber(32, 1), // min value of 1
+            new Blockly.FieldNumber(32, 1),
             "FILTERS"
         );
     this.appendDummyInput()
         .appendField("Kernel Size: ")
         .appendField(
-            new Blockly.FieldNumber(3, 1),
+            new Blockly.FieldNumber(3, 1, 5, 1, function (newValue) {
+              kernelPreview.setValue(newValue);
+            }),
             "KERNEL_SIZE"
-        );
+        )
+        .appendField(kernelPreview, "KERNEL_PREVIEW");
     this.appendDummyInput()
         .appendField("Strides:")
         .appendField(
-            new Blockly.FieldNumber(1, 1), // Default stride is usually 1, not 3!
+            new Blockly.FieldNumber(1, 1),
             "STRIDES"
         );
     this.appendDummyInput()
@@ -42,10 +48,10 @@ Blockly.Blocks["seperableConv2d"] = {
                 ["Sigmoid", "sigmoid"],
                 ["Tanh", "tanh"]
             ], function (newValue) {
-              preview.setValue("preview")
+              activationPreview.setValue(newValue);
             }),
             "ACTIVATION"
-        ).appendField(preview, "PREVIEW");
+        ).appendField(activationPreview, "PREVIEW");
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

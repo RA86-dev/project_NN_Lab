@@ -22,7 +22,21 @@
 .tg .tg-sxqf{border-color:inherit;font-family:inherit;text-align:left;vertical-align:top}
 .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 .docsBody {padding: 50px}
-
+.blocklyFieldKernelSize .kernelSizePreview { pointer-events: none; }
+.blocklyFieldKernelSize .kernelSizeCard {
+  fill: #0f172a;
+  stroke: #7dd3fc;
+  stroke-width: 1.5;
+}
+.blocklyFieldKernelSize .kernelSizeCell {
+  fill: #334155;
+  stroke: #64748b;
+  stroke-width: .5;
+}
+.blocklyFieldKernelSize .kernelSizeCellActive {
+  fill: #22d3ee;
+  stroke: #cffafe;
+}
 .brandMark {
   width: 38px;
   height: 38px;
