@@ -1,7 +1,10 @@
 import * as Blockly from "blockly";
 
+import { FieldActivation } from "../../custom_fields/activationMappedField";
+
 Blockly.Blocks["lstm_layer"] = {
   init: function () {
+    const preview = new FieldActivation("elu");
 
     this.appendDummyInput()
         .appendField("LSTM Layer");
@@ -34,9 +37,11 @@ Blockly.Blocks["lstm_layer"] = {
             ['Softplus', 'softplus'],
             ['Softsign', 'softsign'],
             ['Tanh', 'tanh']
-        ]),
+        ], function (newValue) {
+          preview.setValue(newValue)
+        }),
         "ACTIVATION"
-    );
+    ).appendField(preview, "PREVIEW");
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

@@ -1,9 +1,10 @@
 
 import * as Blockly from "blockly";
+import { FieldActivation } from "../../custom_fields/activationMappedField";
 
 Blockly.Blocks["conv2d_layer"] = {
   init: function () {
-
+    const preview = new FieldActivation("relu");
     this.appendDummyInput()
         .appendField(" Conv2D Layer");
 
@@ -46,10 +47,13 @@ Blockly.Blocks["conv2d_layer"] = {
                 ["Sigmoid", "sigmoid"],
                 ["Softmax", "softmax"],
                 ["Tanh", "tanh"],
-                ["None", "linear"]
-            ]),
+                ["Default", "linear"]
+            ],
+              function (newValue) {
+              preview.setValue(newValue)
+            }),
             "ACTIVATION"
-        );
+        ).appendField(preview, "PREVIEW");
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

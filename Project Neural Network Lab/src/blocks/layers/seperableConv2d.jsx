@@ -1,7 +1,9 @@
 import * as Blockly from "blockly";
+import { FieldActivation } from "../../custom_fields/activationMappedField";
 
 Blockly.Blocks["seperableConv2d"] = {
   init: function () {
+    const preview = new FieldActivation("relu");
     this.appendDummyInput()
         .appendField("Separable Convolution 2D");
     this.appendDummyInput()
@@ -39,9 +41,11 @@ Blockly.Blocks["seperableConv2d"] = {
                 ["Linear", "linear"],
                 ["Sigmoid", "sigmoid"],
                 ["Tanh", "tanh"]
-            ]),
+            ], function (newValue) {
+              preview.setValue("preview")
+            }),
             "ACTIVATION"
-        );
+        ).appendField(preview, "PREVIEW");
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
