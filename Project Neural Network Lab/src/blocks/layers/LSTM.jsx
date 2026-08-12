@@ -1,6 +1,7 @@
 import * as Blockly from "blockly";
 
 import { FieldActivation } from "../../custom_fields/activationMappedField";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["lstm_layer"] = {
   init: function () {
@@ -42,6 +43,7 @@ Blockly.Blocks["lstm_layer"] = {
         }),
         "ACTIVATION"
     ).appendField(preview, "PREVIEW");
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

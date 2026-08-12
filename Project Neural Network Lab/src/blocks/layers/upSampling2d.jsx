@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["up_sampling_2d"] = {
   init: function () {
@@ -23,6 +24,7 @@ Blockly.Blocks["up_sampling_2d"] = {
             ),
             "INTERPOLATION"
         )
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

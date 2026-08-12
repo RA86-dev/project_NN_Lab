@@ -1,5 +1,6 @@
 import * as Blockly from "blockly";
 import { DropoutRate } from "../../custom_fields/DropoutRate";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 Blockly.Blocks["alpha_dropout_layer"] = {
   init: function () {
     const dropoutRateCanvas = new DropoutRate(0.5);
@@ -17,6 +18,7 @@ Blockly.Blocks["alpha_dropout_layer"] = {
     ).appendField(
       dropoutRateCanvas, "DROPOUT_CANVAS"
         );
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

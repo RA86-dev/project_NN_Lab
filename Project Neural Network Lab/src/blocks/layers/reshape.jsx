@@ -1,5 +1,6 @@
 
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["reshape_layer"] = {
   init: function () {
@@ -11,6 +12,7 @@ Blockly.Blocks["reshape_layer"] = {
             new Blockly.FieldTextInput("28,28,1"),
             "NEW_LAYER_FORMAT"
         )
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

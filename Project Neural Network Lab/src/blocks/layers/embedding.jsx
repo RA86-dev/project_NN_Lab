@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["embedding_layer"] = {
   init: function () {
@@ -24,6 +25,7 @@ Blockly.Blocks["embedding_layer"] = {
             new Blockly.FieldNumber(100, 1),
             "Input Length"
         );
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

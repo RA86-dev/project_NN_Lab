@@ -1,5 +1,6 @@
 import * as Blockly from "blockly";
 import { FieldActivation } from "../../custom_fields/activationMappedField";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["activation_layer"] = {
   init: function () {
@@ -30,6 +31,7 @@ Blockly.Blocks["activation_layer"] = {
           "ACTIVATION"
         )
         .appendField(preview, "PREVIEW");
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
     this.setColour("#5ba58c");

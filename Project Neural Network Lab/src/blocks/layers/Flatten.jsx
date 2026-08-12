@@ -1,11 +1,13 @@
 
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["flatten_layer"] = {
   init: function () {
 
     this.appendDummyInput()
         .appendField(" Flatten Layer");
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

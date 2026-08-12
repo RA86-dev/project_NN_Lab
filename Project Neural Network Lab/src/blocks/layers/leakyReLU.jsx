@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["leakyReLU"] = {
   init: function () {
@@ -11,6 +12,7 @@ Blockly.Blocks["leakyReLU"] = {
             new Blockly.FieldNumber(0.3, 0, 1, 0.1),
             "ALPHA"
         ); 
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

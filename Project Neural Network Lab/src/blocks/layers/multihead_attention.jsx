@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["multihead_attention"] = {
   init: function () {
@@ -17,6 +18,7 @@ Blockly.Blocks["multihead_attention"] = {
             new Blockly.FieldNumber(64, 1),
             "DIMENSION"
         );
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

@@ -3,13 +3,14 @@
 //     strides: 2
 // })
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["GlobalAveragePooling2D"] = {
   init: function () {
 
     this.appendDummyInput()
         .appendField("Global Average Pooling 2D Layer");
-        
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

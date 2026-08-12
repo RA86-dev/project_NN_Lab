@@ -1,6 +1,7 @@
 import * as Blockly from "blockly";
 import { FieldActivation } from "../../custom_fields/activationMappedField";
 import { KernelSizeField } from "../../custom_fields/KernelSizeField";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["seperableConv2d"] = {
   init: function () {
@@ -52,6 +53,7 @@ Blockly.Blocks["seperableConv2d"] = {
             }),
             "ACTIVATION"
         ).appendField(activationPreview, "PREVIEW");
+    appendShapeBadge(this);
 
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

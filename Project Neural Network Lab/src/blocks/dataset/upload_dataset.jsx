@@ -150,6 +150,19 @@ export function prepareUploadedDataset(blockId, inputKey, labelKey, task) {
 
 Blockly.Blocks.upload_dataset = {
   init() {
+    this.getDatasetInputShape = () => {
+      try {
+        return prepareUploadedDataset(
+          this.id,
+          this.getFieldValue("INPUT_KEY"),
+          this.getFieldValue("LABEL_KEY"),
+          this.getFieldValue("TASK"),
+        ).inputShape;
+      } catch {
+        return null;
+      }
+    };
+
     this.appendDummyInput()
       .appendField("Upload Dataset")
       .appendField(new Blockly.FieldImage(

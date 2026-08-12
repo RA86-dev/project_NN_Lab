@@ -1,5 +1,6 @@
 
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["permute_layer"] = {
   init: function () {
@@ -12,6 +13,7 @@ Blockly.Blocks["permute_layer"] = {
             new Blockly.FieldTextInput("2,1"),
             "DIMS"
         );
+    appendShapeBadge(this);
     
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");

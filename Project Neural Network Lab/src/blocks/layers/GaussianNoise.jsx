@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["gaussian_noise"] = {
   init: function () {
@@ -8,6 +9,7 @@ Blockly.Blocks["gaussian_noise"] = {
     this.appendDummyInput()
         .appendField("Standard Deviation:")
         .appendField(new Blockly.FieldNumber(0.1, 0, 1, 0.1), "STDDEV");
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

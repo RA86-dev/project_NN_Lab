@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["batch_normalization"] = {
   init: function () {
@@ -6,7 +7,7 @@ Blockly.Blocks["batch_normalization"] = {
     this.appendDummyInput()
         .appendField(" Batch Normalization");
 
-    
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 

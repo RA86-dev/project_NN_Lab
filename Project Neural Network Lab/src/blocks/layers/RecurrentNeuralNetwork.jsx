@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import { appendShapeBadge } from "../../custom_fields/FieldShapeBadge";
 
 Blockly.Blocks["rnn_layer"] = {
   init: function () {
@@ -18,6 +19,7 @@ Blockly.Blocks["rnn_layer"] = {
             new Blockly.FieldCheckbox(false),
             "RETURN_SEQUENCES"
         );
+    appendShapeBadge(this);
     this.setPreviousStatement(true, "LAYER");
     this.setNextStatement(true, "LAYER");
 
