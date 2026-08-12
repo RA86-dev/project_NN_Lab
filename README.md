@@ -13,7 +13,7 @@ A blockly based (*Scratch-style engine*) that allows you to run neural network m
 
 **NOTE:** Due to memory restrictions in the browser, do not expect large datasets to perform very well in the browser. This is due to browser restrictions from the browser's memory restrictions and how much memory you have. However, we have swapped to Web Workers, meaning that training is performed on a seperate "worker" to prevent the other workers (Including the frontend) from lagging.
 
-I also recorded a video [here](README_assets/video_recording.mov). When it makes a mistake at one, this is because this neural network is not perfect! Its supposed to show you how to do it, however, to build a production level AI, that would require a larger model.
+I also recorded a video [here](README_assets/video_recording.mp4). When it makes a mistake at one, this is because this neural network is not perfect! Its supposed to show you how to do it, however, to build a production level AI, that would require a larger model.
 ## Features
 Currently, the following has been added:
 - Blockly Engine
