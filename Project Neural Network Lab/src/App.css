@@ -1,3 +1,4 @@
+
 .appShell { min-height: 100vh; }
 
 .appHeader {
@@ -13,7 +14,6 @@
   z-index: 20;
   backdrop-filter: blur(12px);
 }
-
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
   overflow:hidden;padding:10px 5px;word-break:normal;}

@@ -265,6 +265,7 @@ export class FieldShapeBadge extends Blockly.Field {
     this.fieldGroup_?.classList.add("blocklyFieldShapeBadge");
     this.textElement_?.setAttribute("font-size", "11px");
     this.textElement_?.setAttribute("font-weight", "600");
+
     this.applyBadgeStyle_();
   }
 
