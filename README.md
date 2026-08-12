@@ -7,13 +7,13 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/RA86-dev/project_NN_lab)
 ![Hackatime Tracking](https://hackatime.hackclub.com/api/v1/badge/U0BL0LQQH8D/RA86-dev/project_NN_Lab)
 ---
-A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**. This was made for Stardance Hackclub (*2026-2027*). (NOTE: The CDN used in this project is from Stardance! if it is no longer available, please modify src/mnist.jsx and replace the link with the on from loremh below).
-
-
+A blockly based (*Scratch-style engine*) that allows you to run neural network models and customize it based on blockly blocks. It uses NPM and runs *Tensorflow.JS* in the browser, making demos very easy. See the demo [here](https://ra86-dev.github.io/project_NN_Lab/). Its run on Github Pages using a Github Actions workflow that autocompiles. **I recommend that you read this README before you go to the project**. This was made for Stardance Hackclub (*2026-2027*). (NOTE: The CDN used in this project is from Stardance! if it is no longer available, please modify src/mnist.jsx and replace the link with the on from loremh below). 
 
 *NOTE: I used lorenmh/mnist_handwritten_json* in this project. You can view that repository [here](https://github.com/lorenmh/mnist_handwritten_json).
 
 **NOTE:** Due to memory restrictions in the browser, do not expect large datasets to perform very well in the browser. This is due to browser restrictions from the browser's memory restrictions and how much memory you have. However, we have swapped to Web Workers, meaning that training is performed on a seperate "worker" to prevent the other workers (Including the frontend) from lagging.
+
+I also recorded a video [here](README_assets/video_recording.mov). When it makes a mistake at one, this is because this neural network is not perfect! Its supposed to show you how to do it, however, to build a production level AI, that would require a larger model.
 ## Features
 Currently, the following has been added:
 - Blockly Engine
