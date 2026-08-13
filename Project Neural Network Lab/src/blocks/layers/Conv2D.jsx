@@ -53,6 +53,7 @@ Blockly.Blocks["conv2d_layer"] = {
               ["Sigmoid", "sigmoid"],
               ["Softmax", "softmax"],
               ["Tanh", "tanh"],
+              ["Gelu", "gelu"],
               ["Default", "linear"]
             ],
             function (newValue) {

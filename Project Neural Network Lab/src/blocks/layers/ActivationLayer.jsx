@@ -23,6 +23,7 @@ Blockly.Blocks["activation_layer"] = {
               ["Softplus", "softplus"],
               ["Softsign", "softsign"],
               ["Tanh", "tanh"],
+              ["GELU", "gelu"],
             ],
             function (newValue) {
               preview.setValue(newValue);

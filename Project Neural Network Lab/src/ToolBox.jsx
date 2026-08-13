@@ -31,6 +31,7 @@ import "./blocks/layers/PermuteLayer"
 import "./blocks/set_seed"
 import "./blocks/layers/upSampling2d"
 import "./blocks/layers/seperableConv2d"
+import "./blocks/layers/prelu_layer"
 export const toolbox = {
 kind: "categoryToolbox",
 contents: [
@@ -87,6 +88,10 @@ contents: [
         {
             kind: "block",
             type: "leakyReLU"
+        },
+        {
+            kind: "block",
+            type: "prelu_layer"
         }
     ]
 },

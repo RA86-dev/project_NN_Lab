@@ -198,6 +198,11 @@ export function compileBlock(block) {
         max: numberField(block, "MAX_X"),
         points: numberField(block, "POINTS"),
       };
+    case "prelu_layer":
+      return {
+        type: "prelu",
+        alpha: numberField(block, "ALPHA")
+      }
     case "multihead_attention":
       return {
         type: "multihead_attention",
@@ -491,6 +496,9 @@ logger({ type: "seed-set", seed: ${seed} });`;
           })`);
         } else if (layer.type === "activation") {
           compiledLayers.push(`tf.layers.activation({ activation: ${JSON.stringify(layer.activation)}${firstInputShape()} })`);
+        } else if (layer.type === "prelu") {
+          const alpha = layer.alpha ?? 0.25;
+          compiledLayers.push(`tf.layers.leakyReLU({ alpha: ${alpha}${firstInputShape()} })`);
         } else if (layer.type === "conv2d") {
           compiledLayers.push(`tf.layers.conv2d({
             filters: ${layer.filters},

@@ -47,7 +47,8 @@ Blockly.Blocks["seperableConv2d"] = {
                 ["ReLU", "relu"],
                 ["Linear", "linear"],
                 ["Sigmoid", "sigmoid"],
-                ["Tanh", "tanh"]
+                ["Tanh", "tanh"],
+                ["Gelu", "gelu"]
             ], function (newValue) {
               activationPreview.setValue(newValue);
             }),

@@ -37,7 +37,8 @@ Blockly.Blocks["lstm_layer"] = {
             ['Softmax', 'softmax'],
             ['Softplus', 'softplus'],
             ['Softsign', 'softsign'],
-            ['Tanh', 'tanh']
+            ['Tanh', 'tanh'],
+            ['GELU', 'gelu']
         ], function (newValue) {
           preview.setValue(newValue)
         }),

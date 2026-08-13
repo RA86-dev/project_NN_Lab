@@ -47,6 +47,11 @@ function generateActivationSvg(type, alpha = 1.0) {
       case 'softsign':
         y = x / (1 + Math.abs(x));
         break;
+      case 'gelu': {
+        const sigma = 1 / (1 + Math.exp(-1.6 * x));
+        y = x * sigma;
+        break;
+      }
       case 'tanh':
         y = Math.tanh(x);
         break;
