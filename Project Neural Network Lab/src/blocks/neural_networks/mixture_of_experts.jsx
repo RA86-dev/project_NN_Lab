@@ -24,7 +24,7 @@ Blockly.Blocks["mixture_of_experts"] = {
 
 
     this.setColour("#995ba5");
-    this.setTooltip("A sequential neural network model");
+    this.setTooltip("A MoE-style neural network model definer. ");
     this.setHelpUrl("");
   }
 };

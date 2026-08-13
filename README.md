@@ -1,3 +1,4 @@
+
 # Project Neural Network Lab
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
@@ -69,12 +70,13 @@ npm run dev # Development is for non-production grade (like testing)
 # FOR PRODUCTION:
 npm run build
 npm run start
+# Modify vite.config.js if you need something changed.
 ```
 </details>
 
 
 ## License
-Licensed under ISC/MIT [here](LICENSE)
+Licensed under Apache 2.0. [here](LICENSE)
 ## AI Use Declaration
 In this project, AI was used for the user interface and debugging issues along with writing some functions. It was not used to write documentation.
 ## Example Image
@@ -85,6 +87,11 @@ In this project, AI was used for the user interface and debugging issues along w
 ## Getting Started Guide (How to Use)
 Hello! This is a guide on how to use my project.
 The goal of this project is to simplify AI models and training, so it doens't overwhelm people while still allowing them to build what they want and experiment (and break stuff). To start, all you need to do is head to the Basic Blocks section, pull a main Program block, and then add a train and inference. Choose a dataset, and you can get started with designing your system. Note, you might need a lot of Neural network knowledge to use this, however, its made to make it easier to understand and build scripts to train and experiment with AI models.
+
+Its consists of three main sections:
+1. The Editor - this is the area where you build the model. This uses Blockly.
+2. The Tools - section of tools and other useful things (including importing extensions)
+3. Execution/Inference Lab 
 ### Vocabulary
 Every "fancy" word is listed here, along with a simplified definition.
 - Model - the neural network. A neural network in this case, is basically a artificial version of the brain network structure.
@@ -104,7 +111,7 @@ Every "fancy" word is listed here, along with a simplified definition.
 - MNIST dataset - The MNIST dataset is a 70,000 images dataset of data classification. It contains handwritten numbers, and the model must identify what number is it. It is useful for testing new structures. (NOTE: Do not load more than ~5,000 though. That causes a lot of lag.)
 - Alpha Dropout - A variation of dropout that maintains the mean and variance of the inputs, designed for self-normalizing networks (like SeLU!)
 - GlobalAveragePooling2D - Calculates the average value for each feature map, replacing the heavy Flatten and Dense layer to reduce model parameters.
-- LeakyReLU - A activation function based on ReLU that solves a issue of dead neurons by letting a tiny, non-zero signal pass through when inputs are negative.
+- LeakyReLU - A activation function based on ReLU that solves an issue of dead neurons by letting a tiny, non-zero signal pass through when inputs are negative.
 - Reshape - Alters the dimensions of a input tensor without changing the data.
 
 Here's a example model:
