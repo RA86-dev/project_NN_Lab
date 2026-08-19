@@ -321,8 +321,7 @@ export function HelpDesk({ workspace }) {
     <aside className="toolsHelpDesk">
       <div className="sectionHeading">
         <div>
-          <p className="eyebrow">Project Management</p>
-          <h2>Files & reference</h2>
+          <p className="eyebrow">Files And Reference</p>
         </div>
       </div>
 
@@ -362,7 +361,6 @@ export function HelpDesk({ workspace }) {
             <span className="extensionImportTitle">Add an extension</span>
             <p>Load custom blocks and model features from a JavaScript file.</p>
           </div>
-          <span className="extensionFileType">.JS</span>
         </div>
         <input
           ref={jsImportRef}

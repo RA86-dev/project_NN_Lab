@@ -3,33 +3,56 @@ import * as Blockly from "blockly";
 import * as tf from "@tensorflow/tfjs";
 import ModernTheme from '@blockly/theme-modern';
 import Chart from "chart.js/auto";
-import '@tensorflow/tfjs-backend-webgpu'
+import '@tensorflow/tfjs-backend-webgpu';
 import '@tensorflow/tfjs-backend-webgl'
 import "./App.css";
 import { HelpDesk } from "./HelpDesk";
+let font_theme = document.body.style.fontFamily;
+let weight = document.body.style.fontWeight;
+const lightTheme = Blockly.Theme.defineTheme('lightTheme', {
+  base: ModernTheme,
+  fontStyle: { family: font_theme, weight: weight },
+  componentStyles: {
+    workspaceBackgroundColour: '#ffffff',
+    toolboxBackgroundColour: '#f3f3f3',
+    toolboxForegroundColour: '#333333',
+    flyoutBackgroundColour: '#f7f7f7'
+  }
+});
 
-
+const darkTheme = Blockly.Theme.defineTheme('darkTheme', {
+  base: ModernTheme,
+  fontStyle: { family: font_theme, weight: weight },
+  componentStyles: {
+    workspaceBackgroundColour: '#1e1e1e', // Dark charcoal
+    toolboxBackgroundColour: '#252526',
+    toolboxForegroundColour: '#ffffff',
+    flyoutBackgroundColour: '#2d2d30'
+  }
+})
 import { toolbox } from "./ToolBox";
 import { Interpreter } from "./compiler";
 
 function Icon({ name, size = 18 }) {
-  const paths = {
-    play: <path d="m8 5 11 7-11 7V5Z" />,
-    blocks: <><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><path d="M16.5 14v5M14 16.5h5" /></>,
-    spark: <><path d="M12 3v3M12 18v3M3 12h3M18 12h3" /><circle cx="12" cy="12" r="3.5" /></>,
-  };
+  // const paths = {
+  //   play: <path d="m8 5 11 7-11 7V5Z" />,
+  //   blocks: <><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><path d="M16.5 14v5M14 16.5h5" /></>,
+  //   spark: <><path d="M12 3v3M12 18v3M3 12h3M18 12h3" /><circle cx="12" cy="12" r="3.5" /></>,
+  // };
 
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {paths[name]}
-    </svg>
-  );
+  // return (
+  //   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  //     {paths[name]}
+  //   </svg>
+  // );
+  return (<></>)
 }
 
 function BlocklyEditor({ setWorkspace }) {
   const blocklyDiv = useRef(null);
 
   useEffect(() => {
+
     const workspace = Blockly.inject(blocklyDiv.current, {
       toolbox,
       trashcan: true,
@@ -39,8 +62,16 @@ function BlocklyEditor({ setWorkspace }) {
       zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 1.6, minScale: 0.45 },
       grid: { spacing: 24, length: 2, colour: "#d8dee9", snap: true },
       move: { scrollbars: true, drag: true, wheel: true },
-    });
 
+    });
+    const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
+
+      if (event.matches) workspace.setTheme(lightTheme);
+      else workspace.setTheme(darkTheme);
+    darkModeMatcher.addEventListener('change', (event) => {
+      if (event.matches) workspace.setTheme(lightTheme);
+      else workspace.setTheme(darkTheme);
+    })
     const closeFlyoutAfterInsert = (event) => {
       if (event.type === Blockly.Events.BLOCK_CREATE) {
         workspace.getToolbox()?.clearSelection();
@@ -118,18 +149,18 @@ function LossChart({ lossHistory }) {
           {
             label: "Training loss",
             data: [],
-            borderColor: isDark ? "#60a5fa" : "#2563eb",
-            backgroundColor: isDark ? "rgba(96, 165, 250, 0.08)" : "rgba(37, 99, 235, 0.06)",
+            borderColor: isDark ? "#d7673b" : "#a53d1c",
+            backgroundColor: isDark ? "#23211f" : "#ffffff",
             borderWidth: 2,
             pointRadius: 0,
             pointHoverRadius: 4,
             tension: 0.28,
-            fill: true,
+            fill: false,
           },
           {
             label: "Validation loss",
             data: [],
-            borderColor: isDark ? "#fb923c" : "#ea580c",
+            borderColor: isDark ? "#9da85a" : "#687234",
             borderDash: [5, 4],
             borderWidth: 1.5,
             pointRadius: 0,
@@ -168,7 +199,7 @@ function LossChart({ lossHistory }) {
           y: {
             beginAtZero: true,
             border: { display: false },
-            grid: { color: isDark ? "rgba(148, 163, 184, 0.12)" : "rgba(148, 163, 184, 0.18)" },
+            grid: { color: isDark ? "#3f3a34" : "#ddd7cd" },
             ticks: {
               color: isDark ? "#8995a7" : "#7b8494",
               maxTicksLimit: 5,
@@ -198,7 +229,6 @@ function LossChart({ lossHistory }) {
     <div className="lossChart">
       {lossHistory.length === 0 && (
         <div className="chartPlaceholder">
-          <span className="placeholderIcon"><Icon name="spark" /></span>
           <span>Your loss curve will appear here</span>
         </div>
       )}
@@ -210,10 +240,9 @@ function LossChart({ lossHistory }) {
 function activationColor(value, maxMagnitude) {
   if (value == null) return "var(--heatmap-empty)";
   const strength = Math.min(Math.abs(value) / (maxMagnitude || 1), 1);
-  const alpha = 0.12 + strength * 0.82;
-  return value < 0
-    ? `rgba(234, 88, 12, ${alpha})`
-    : `rgba(37, 99, 235, ${alpha})`;
+  const weight = Math.round(18 + strength * 82);
+  const color = value < 0 ? "var(--heatmap-negative)" : "var(--heatmap-positive)";
+  return `color-mix(in srgb, ${color} ${weight}%, var(--surface-muted))`;
 }
 
 function ActivationHeatmap({ layers }) {
@@ -268,7 +297,6 @@ function ActivationHeatmap({ layers }) {
         </>
       ) : (
         <div className="heatmapEmpty">
-          <span className="placeholderIcon"><Icon name="spark" /></span>
           <span>Run your model to inspect its layers</span>
         </div>
       )}
@@ -481,7 +509,7 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
     { id: "neurons", label: "Neurons", ready: activationLayers.length > 0 },
     { id: "inference", label: "Inference", ready: Boolean(inferenceTarget) },
     { id: "console", label: "Console", ready: logs.length > 0 },
-  ];
+    ];
 
   return (
     <section className="resultsPanel" aria-live="polite">
@@ -519,10 +547,11 @@ function ResultsPanel({ logs, lossHistory, activationLayers, inferenceTarget, in
 
         {activeView === "neurons" && <ActivationHeatmap layers={activationLayers} />}
 
+
         {activeView === "inference" && (
           inferenceTarget
             ? <InferencePanel target={inferenceTarget} initialResult={inferenceResult} predict={predict} />
-            : <div className="resultEmpty"><span className="placeholderIcon"><Icon name="spark" /></span><p>Add an inference block after training to use this view.</p></div>
+            : <div className="resultEmpty"><p>Add an inference block after training to use this view.</p></div>
         )}
 
         {activeView === "console" && (
@@ -787,16 +816,7 @@ function App() {
 
       <main>
         <section className="workspacePanel">
-          <div className="workspaceHeading">
-            <div>
-              <h1>Build a Neural Network</h1>
-            </div>
-            <p>
-              Drag blocks from the library and connect them into a training pipeline. First, always
-              start with the Main Program input block. Connect all other blocks using that. For
-              inference using a model, please set a decent name for it.
-            </p>
-          </div>
+
           <div className="canvasFrame">
             <BlocklyEditor setWorkspace={setWorkspace} />
           </div>
